@@ -7,16 +7,24 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import CardMedia from '@material-ui/core/CardMedia';
 
 import { useAuthentification, AuthentificationState } from '../../context/AuthentificationContext';
 
 const useStyles = makeStyles({
   cardContainer: {
+    padding: 20,
     textAlign: 'center'
   },
   card: {
     display: 'inline-block',
     maxWidth: 345
+  },
+  hint: {
+    fontSize: 12
+  },
+  media: {
+    height: 140
   }
 });
 
@@ -35,9 +43,17 @@ export default function LoginPage(props: Props) {
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.card}>
+        <CardMedia
+          className={classes.media}
+          image="https://upload.wikimedia.org/wikipedia/commons/f/f6/Eiffel_Tower_and_the_Trocadero%2C_Exposition_Universal%2C_1900%2C_Paris%2C_France.jpg"
+          title="Eiffel Tower"
+        />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             Welcome to TodoList React
+          </Typography>
+          <Typography className={classes.hint} color="textSecondary" gutterBottom>
+            Try with password: “password”
           </Typography>
           <TextField label="Username" value={username} onChange={p => setUsername(p.currentTarget.value)} />
           <br />
