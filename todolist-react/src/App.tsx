@@ -1,26 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import AuthentificationWrapper from './component/authentification/AuthentificationWrapper';
+import { AuthentificationProvider } from './context/AuthentificationContext';
+
+const ListPage = React.lazy(() => import('./component/list/ListPage'));
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthentificationProvider>
+        <AuthentificationWrapper>
+          <ListPage />
+        </AuthentificationWrapper>
+      </AuthentificationProvider>
     </div>
   );
-}
+};
 
 export default App;
