@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useAuthentification, AuthentificationState } from '../../context/AuthentificationContext';
+import { useAuthentification, AuthentificationState } from '../context/AuthentificationContext';
 
 type Props = { children: JSX.Element[] | JSX.Element };
 

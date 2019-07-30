@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthentificationWrapper from './component/authentification/AuthentificationWrapper';
+import AuthentificationWrapper from './hoc/AuthentificationWrapper';
 import { AuthentificationProvider } from './context/AuthentificationContext';
 
 const ListPage = React.lazy(() => import('./component/list/ListPage'));
