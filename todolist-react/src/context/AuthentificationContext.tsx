@@ -12,6 +12,7 @@ export type AuthentificationContextType = {
   token: string;
   state: AuthentificationState;
   login: (user: string, pass: string) => void;
+  logout: () => void;
 };
 
 const defaultAuthentification = {} as AuthentificationContextType;
@@ -48,7 +49,12 @@ export function AuthentificationProvider<TProps>(props: TProps) {
     }
   };
 
-  return <AuthentificationContext.Provider value={{ username, token, state: authState, login }} {...props} />;
+  const logout = () => {
+    setToken('');
+    setAuthState(AuthentificationState.NonAuthentificated);
+  };
+
+  return <AuthentificationContext.Provider value={{ username, token, state: authState, login, logout }} {...props} />;
 }
 
 export function useAuthentification() {
