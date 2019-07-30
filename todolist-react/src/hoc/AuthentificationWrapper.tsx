@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { useAuthentification, AuthentificationState } from '../context/AuthentificationContext';
+import LoginPage from '../component/login/LoginPage';
 
 type Props = { children: JSX.Element[] | JSX.Element };
 
