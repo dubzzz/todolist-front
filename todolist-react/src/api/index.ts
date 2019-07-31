@@ -33,12 +33,12 @@ export const clearStorage = (space: string, keyName: string) => {
 
 /* Todolist */
 
-type Todo = {
+export type Todo = {
   guid: string;
   task: string;
   done: boolean;
 };
-type TodoListenerHandle = {
+export type TodoListenerHandle = {
   _i: {
     _handleId?: NodeJS.Timeout;
     _data?: Todo[];
