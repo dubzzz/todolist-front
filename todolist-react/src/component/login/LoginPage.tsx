@@ -66,13 +66,29 @@ function LoginPage(props: Props) {
           <Typography className={classes.hint} color="textSecondary" gutterBottom>
             Try with password: “password”
           </Typography>
-          <TextField label="Username" value={username} onChange={p => setUsername(p.currentTarget.value)} />
+          <TextField
+            label="Username"
+            value={username}
+            onChange={p => setUsername(p.currentTarget.value)}
+            onKeyPress={ev => {
+              if (ev.which === 13 && canLogin) {
+                login(username, password);
+                ev.preventDefault();
+              }
+            }}
+          />
           <br />
           <TextField
             label="Password"
             type="password"
             value={password}
             onChange={p => setPassword(p.currentTarget.value)}
+            onKeyPress={ev => {
+              if (ev.which === 13 && canLogin) {
+                login(username, password);
+                ev.preventDefault();
+              }
+            }}
           />
         </CardContent>
         <CardActions>
