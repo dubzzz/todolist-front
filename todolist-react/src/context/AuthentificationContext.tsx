@@ -19,16 +19,16 @@ const defaultAuthentification = {} as AuthentificationContextType;
 const AuthentificationContext = createContext(defaultAuthentification);
 
 export function AuthentificationProvider<TProps>(props: TProps) {
-  const [username, setUsername] = useState(() => Api.readStorage(AuthentificationProvider, 'username'));
-  const [token, setToken] = useState(() => Api.readStorage(AuthentificationProvider, 'token'));
+  const [username, setUsername] = useState(() => Api.readStorage('AuthentificationProvider', 'username'));
+  const [token, setToken] = useState(() => Api.readStorage('AuthentificationProvider', 'token'));
   const [authState, setAuthState] = useState(AuthentificationState.OnGoingAuthentification);
 
   useEffect(() => {
     const checkToken = async () => {
       const validToken = token !== '' && (await Api.checkToken(token));
       if (validToken) {
-        Api.writeStorage(AuthentificationProvider, 'username', username);
-        Api.writeStorage(AuthentificationProvider, 'token', token);
+        Api.writeStorage('AuthentificationProvider', 'username', username);
+        Api.writeStorage('AuthentificationProvider', 'token', token);
         setAuthState(AuthentificationState.Authentificated);
       } else setAuthState(AuthentificationState.NonAuthentificated);
     };
@@ -56,8 +56,8 @@ export function AuthentificationProvider<TProps>(props: TProps) {
     setToken('');
     setAuthState(AuthentificationState.NonAuthentificated);
 
-    Api.clearStorage(AuthentificationProvider, 'username');
-    Api.clearStorage(AuthentificationProvider, 'token');
+    Api.clearStorage('AuthentificationProvider', 'username');
+    Api.clearStorage('AuthentificationProvider', 'token');
   };
 
   return <AuthentificationContext.Provider value={{ username, token, state: authState, login, logout }} {...props} />;
