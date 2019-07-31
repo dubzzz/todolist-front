@@ -14,7 +14,7 @@ function AuthentificationWrapper(props: Props) {
         <Redirect
           to={{
             pathname: '/login',
-            state: { redirect: props.location }
+            search: `?redirect=${encodeURIComponent(props.location.pathname)}`
           }}
         />
       );

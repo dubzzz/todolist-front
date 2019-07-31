@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom';
-import { StaticContext } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -30,13 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-type Props = {} & RouteComponentProps<
-  {},
-  StaticContext,
-  {
-    redirect: RouteComponentProps['location'];
-  }
->;
+type Props = {} & RouteComponentProps;
 
 function LoginPage(props: Props) {
   const classes = useStyles();
@@ -48,7 +41,8 @@ function LoginPage(props: Props) {
   const onGoingLogin = state === AuthentificationState.OnGoingAuthentification;
 
   if (state === AuthentificationState.Authentificated) {
-    let { redirect } = props.location.state || { redirect: { pathname: '/' } };
+    const params = new URLSearchParams(props.location.search);
+    const redirect = params.get('redirect') || '/';
     return <Redirect to={redirect} />;
   }
   return (
