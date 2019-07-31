@@ -70,7 +70,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) throw new Error(`No todo available for modification given guid ${guid}`);
 
-    const todo = { ...prevTodo.data, done: prevTodo.data.done };
+    const todo = { ...prevTodo.data, done: !prevTodo.data.done };
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { data: todo, state: TodoState.Edit } : t)));
     Api.editTodo(todo).then(r => {
