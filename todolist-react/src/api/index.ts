@@ -17,6 +17,20 @@ export const checkToken = (token: string): Promise<boolean> => {
   return success(true, 500);
 };
 
+/* Storage API */
+
+export const readStorage = (fn: Function, keyName: string) => {
+  return localStorage.getItem(`${fn.name}::${keyName}`) || '';
+};
+
+export const writeStorage = (fn: Function, keyName: string, value: string) => {
+  return localStorage.setItem(`${fn.name}::${keyName}`, value);
+};
+
+export const clearStorage = (fn: Function, keyName: string) => {
+  return localStorage.removeItem(`${fn.name}::${keyName}`);
+};
+
 /* Helpers */
 
 const success = <T>(out: T, ms: number): Promise<T> => {
