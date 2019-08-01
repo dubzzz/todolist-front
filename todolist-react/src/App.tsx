@@ -5,9 +5,7 @@ import { withAuthentificated } from './hoc/Authentificated';
 import { AuthentificationProvider } from './context/AuthentificationContext';
 import LoginPage from './component/login/LoginPage';
 
-const LearnMorePage = React.lazy(() => import('./component/learn-more/LearnMorePage'));
-const ListPage = React.lazy(() => import('./component/list/ListPage'));
-const NotFoundPage = React.lazy(() => import('./component/not-found/NotFoundPage'));
+const AppPage = React.lazy(() => import('./component/app/AppPage'));
 
 const App: React.FC = () => {
   return (
@@ -15,10 +13,8 @@ const App: React.FC = () => {
       <AuthentificationProvider>
         <Router>
           <Switch>
-            <Route exact path="/" component={withAuthentificated(ListPage)} />
-            <Route exact path="/learn-more" component={withAuthentificated(LearnMorePage)} />
             <Route exact path="/login" component={LoginPage} />
-            <Route component={withAuthentificated(NotFoundPage)} />
+            <Route component={withAuthentificated(AppPage)} />
           </Switch>
         </Router>
       </AuthentificationProvider>

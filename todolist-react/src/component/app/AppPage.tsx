@@ -4,6 +4,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppHeader from './AppHeader';
 import { TodoListProvider } from '../../context/TodoListContext';
 import AppMenu from './AppMenu';
+import { Switch, Route } from 'react-router-dom';
+
+const LearnMorePage = React.lazy(() => import('../learn-more/LearnMorePage'));
+const ListPage = React.lazy(() => import('../list/ListPage'));
+const NotFoundPage = React.lazy(() => import('../not-found/NotFoundPage'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type Props = { children: JSX.Element | JSX.Element[] };
+type Props = {};
 
 export default function AppPage(props: Props) {
   const classes = useStyles();
@@ -32,7 +37,11 @@ export default function AppPage(props: Props) {
         <AppMenu drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <main className={classes.content}>
           <div className={classes.appBarSpacer}></div>
-          {props.children}
+          <Switch>
+            <Route exact path="/" component={ListPage} />
+            <Route exact path="/learn-more" component={LearnMorePage} />
+            <Route component={NotFoundPage} />
+          </Switch>
         </main>
       </TodoListProvider>
     </div>
