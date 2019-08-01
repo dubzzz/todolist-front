@@ -28,7 +28,18 @@ export default function LearnMorePage(props: Props) {
         Revoke token
       </Typography>
       <Typography>
-        The token used and stored to keep the user connected to the API can be revoked by updating the value of <em>window.validToken</em> in the console.
+        The token used and stored to keep the user connected to the API can be revoked by updating the value of{' '}
+        <em>window.validToken</em> in the console or by clicking{' '}
+        <button
+          onClick={() =>
+            ((window as any).validToken = Math.random()
+              .toString(16)
+              .substr(2))
+          }
+        >
+          here
+        </button>
+        .
       </Typography>
     </>
   );
