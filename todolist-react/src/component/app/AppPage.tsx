@@ -3,15 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppHeader from './AppHeader';
 import { TodoListProvider } from '../../context/TodoListContext';
+import AppMenu from './AppMenu';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    display: 'flex'
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     overflow: 'auto',
+    height: '100vh',
     padding: '2em'
   }
 }));
@@ -27,6 +29,7 @@ export default function AppPage(props: Props) {
       <TodoListProvider>
         <CssBaseline />
         <AppHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
+        <AppMenu drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <main className={classes.content}>
           <div className={classes.appBarSpacer}></div>
           {props.children}
