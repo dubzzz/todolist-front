@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTodoList } from '../../context/TodoListContext';
 import TextField from '@material-ui/core/TextField';
-import { CircularProgress } from '@material-ui/core';
 import TodoItem from './TodoItem';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 type Props = {};
 
@@ -25,6 +26,14 @@ export default function TodoList(props: Props) {
             }
           }}
         />
+        <Button
+          onClick={() => {
+            addTodo(newTodo);
+            setNewTodo('');
+          }}
+        >
+          Add
+        </Button>
       </div>
       {ready ? (
         <div>
