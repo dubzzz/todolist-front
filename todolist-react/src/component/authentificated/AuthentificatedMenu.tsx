@@ -13,6 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useWindowDimension } from '../../hook/WindowDimension';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -42,6 +43,12 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9)
     }
+  },
+  drawerSmallScreenSpacer: {
+    width: theme.spacing(7)
+  },
+  drawerSmallScreen: {
+    position: 'absolute'
   }
 }));
 
@@ -49,6 +56,8 @@ type Props = { drawerOpened: boolean; toggleDrawer: () => void } & RouteComponen
 
 function AuthentificatedMenu(props: Props) {
   const classes = useStyles();
+  const { width } = useWindowDimension();
+
   const AppMenuTooltip = (tooltipProps: { title: string; children: ReactElement }) => {
     if (props.drawerOpened) {
       return <>{tooltipProps.children}</>;
@@ -60,39 +69,48 @@ function AuthentificatedMenu(props: Props) {
     );
   };
 
+  const smallScreen = width < 2 * drawerWidth;
+
   return (
-    <Drawer
-      variant="permanent"
-      classes={{
-        paper: clsx(classes.drawerPaper, !props.drawerOpened && classes.drawerPaperClose)
-      }}
-      open={props.drawerOpened}
-    >
-      <div className={classes.toolbarIcon}>
-        <IconButton onClick={() => props.toggleDrawer()}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        <AppMenuTooltip title="Todos">
-          <ListItem button onClick={() => props.history.push('/')}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Todos" />
-          </ListItem>
-        </AppMenuTooltip>
-        <AppMenuTooltip title="Learn more">
-          <ListItem button onClick={() => props.history.push('/learn-more')}>
-            <ListItemIcon>
-              <HelpIcon />
-            </ListItemIcon>
-            <ListItemText primary="Learn more" />
-          </ListItem>
-        </AppMenuTooltip>
-      </List>
-    </Drawer>
+    <>
+      {smallScreen && <div className={classes.drawerSmallScreenSpacer}></div>}
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(
+            classes.drawerPaper,
+            !props.drawerOpened && classes.drawerPaperClose,
+            smallScreen && classes.drawerSmallScreen
+          )
+        }}
+        open={props.drawerOpened}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={() => props.toggleDrawer()}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <AppMenuTooltip title="Todos">
+            <ListItem button onClick={() => props.history.push('/')}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Todos" />
+            </ListItem>
+          </AppMenuTooltip>
+          <AppMenuTooltip title="Learn more">
+            <ListItem button onClick={() => props.history.push('/learn-more')}>
+              <ListItemIcon>
+                <HelpIcon />
+              </ListItemIcon>
+              <ListItemText primary="Learn more" />
+            </ListItem>
+          </AppMenuTooltip>
+        </List>
+      </Drawer>
+    </>
   );
 }
 
