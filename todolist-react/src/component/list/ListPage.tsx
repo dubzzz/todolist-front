@@ -1,16 +1,13 @@
 import React from 'react';
 import TodoList from './TodoList';
-import { TodoListProvider } from '../../context/TodoListContext';
-import PageLayout from '../PageLayout';
+import AppPage from '../app/AppPage';
 
 type Props = {};
 
 export default function ListPage(props: Props) {
   return (
-    <TodoListProvider>
-      <PageLayout>
-        <TodoList />
-      </PageLayout>
-    </TodoListProvider>
+    <AppPage>
+      <TodoList />
+    </AppPage>
   );
 }
