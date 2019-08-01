@@ -12,6 +12,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -44,9 +45,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type Props = { drawerOpened: boolean; toggleDrawer: () => void };
+type Props = { drawerOpened: boolean; toggleDrawer: () => void } & RouteComponentProps;
 
-export default function AppMenu(props: Props) {
+function AppMenu(props: Props) {
   const classes = useStyles();
   const AppMenuTooltip = (tooltipProps: { title: string; children: ReactElement }) => {
     if (props.drawerOpened) {
@@ -75,7 +76,7 @@ export default function AppMenu(props: Props) {
       <Divider />
       <List>
         <AppMenuTooltip title="Todos">
-          <ListItem button>
+          <ListItem button onClick={() => props.history.push('/')}>
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
@@ -83,7 +84,7 @@ export default function AppMenu(props: Props) {
           </ListItem>
         </AppMenuTooltip>
         <AppMenuTooltip title="Learn more">
-          <ListItem button>
+          <ListItem button onClick={() => props.history.push('/learn-more')}>
             <ListItemIcon>
               <HelpIcon />
             </ListItemIcon>
@@ -94,3 +95,5 @@ export default function AppMenu(props: Props) {
     </Drawer>
   );
 }
+
+export default withRouter(AppMenu);
