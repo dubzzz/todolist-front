@@ -1,0 +1,17 @@
+language: node_js
+node_js: "10"
+
+script:
+  - cd todolist-react && yarn && yarn build && cd ..
+  - mkdir build
+  - mv todolist-react/build build/todolist-react
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  keep-history: true
+  github-token: $GITHUB_TOKEN
+  target-branch: gh-pages
+  local-dir: build
+  on:
+    branch: master
