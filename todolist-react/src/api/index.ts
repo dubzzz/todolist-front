@@ -45,6 +45,12 @@ export type TodoListenerHandle = {
   };
 };
 
+const readTodos = (): Todo[] => {
+  const raw = readStorage('Todos', 'data');
+  if (!raw) return [];
+  return JSON.parse(raw);
+};
+
 export const addTodoListener = (fn: (todos: Todo[]) => void): TodoListenerHandle => {
   const handle: TodoListenerHandle = { _i: {} };
 
@@ -58,7 +64,7 @@ export const addTodoListener = (fn: (todos: Todo[]) => void): TodoListenerHandle
     return false;
   };
   const detectChanges = () => {
-    const newData: Todo[] = JSON.parse(readStorage('Todos', 'data')) || [];
+    const newData = readTodos();
     if (changeDetected(newData)) {
       handle._i._data = newData;
       fn(newData);
@@ -79,7 +85,7 @@ export const removeTodoListener = (handle: TodoListenerHandle): void => {
 export const addTodo = async (todo: Todo): Promise<boolean> => {
   await delay(500);
 
-  const data: Todo[] = JSON.parse(readStorage('Todos', 'data')) || [];
+  const data = readTodos();
   if (data.some(t => t.guid === todo.guid)) return false;
 
   writeStorage('Todos', 'data', JSON.stringify([...data, todo]));
@@ -89,7 +95,7 @@ export const addTodo = async (todo: Todo): Promise<boolean> => {
 export const editTodo = async (todo: Todo): Promise<boolean> => {
   await delay(500);
 
-  const data: Todo[] = JSON.parse(readStorage('Todos', 'data')) || [];
+  const data = readTodos();
   if (!data.some(t => t.guid === todo.guid)) return false;
 
   writeStorage('Todos', 'data', JSON.stringify(data.map(t => (t.guid === todo.guid ? todo : t))));
@@ -99,7 +105,7 @@ export const editTodo = async (todo: Todo): Promise<boolean> => {
 export const removeTodo = async (todo: Todo): Promise<boolean> => {
   await delay(500);
 
-  const data: Todo[] = JSON.parse(readStorage('Todos', 'data')) || [];
+  const data = readTodos();
   if (!data.some(t => t.guid === todo.guid)) return false;
 
   writeStorage('Todos', 'data', JSON.stringify(data.filter(t => t.guid !== todo.guid)));

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
 
 export enum TodoState {
@@ -16,7 +16,7 @@ export type TodoListContextType = {
   todos: TodoType[];
   addTodo: (task: string) => void;
   toggleTodo: (guid: string) => void;
-  clearTodo: (guid: string) => void;
+  removeTodo: (guid: string) => void;
 };
 
 const defaultTodoList = {} as TodoListContextType;
@@ -81,7 +81,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     });
   };
 
-  const clearTodo = (guid: string) => {
+  const removeTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) throw new Error(`No todo available for modification given guid ${guid}`);
 
@@ -94,7 +94,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     });
   };
 
-  return <TodoListContext.Provider value={{ ready, todos, addTodo, toggleTodo, clearTodo }} {...props} />;
+  return <TodoListContext.Provider value={{ ready, todos, addTodo, toggleTodo, removeTodo }} {...props} />;
 }
 
 export function useTodoList() {

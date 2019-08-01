@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import TodoList from './TodoList';
+import { TodoListProvider } from '../../context/TodoListContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +19,12 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+    padding: '2em'
   }
 }));
 
@@ -43,6 +51,11 @@ export default function ListPage(props: Props) {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <main className={classes.content}>
+        <TodoListProvider>
+          <TodoList />
+        </TodoListProvider>
+      </main>
     </div>
   );
 }
