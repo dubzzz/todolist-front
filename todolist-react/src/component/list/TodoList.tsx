@@ -13,7 +13,7 @@ export default function TodoList(props: Props) {
 
   return (
     <div>
-      <div>
+      <div style={{ display: 'flex', marginBottom: '1em' }}>
         <TextField
           label="Add a new todo"
           value={newTodo}
@@ -25,6 +25,7 @@ export default function TodoList(props: Props) {
               ev.preventDefault();
             }
           }}
+          style={{ flexGrow: 1 }}
         />
         <Button
           disabled={newTodo === ''}
