@@ -19,7 +19,7 @@ export default function TodoList(props: Props) {
           value={newTodo}
           onChange={p => setNewTodo(p.currentTarget.value)}
           onKeyPress={ev => {
-            if (ev.which === 13) {
+            if (ev.which === 13 && newTodo !== '') {
               addTodo(newTodo);
               setNewTodo('');
               ev.preventDefault();
@@ -27,6 +27,7 @@ export default function TodoList(props: Props) {
           }}
         />
         <Button
+          disabled={newTodo === ''}
           onClick={() => {
             addTodo(newTodo);
             setNewTodo('');
