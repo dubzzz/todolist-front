@@ -30,6 +30,9 @@ export function TodoListProvider<TProps>(props: TProps) {
     const listener = (newTodos: Api.Todo[]) => {
       setReady(true);
       setTodos(ts => {
+        const todosBeingAdded: { [guid: string]: Api.Todo } = ts
+          .filter(t => t.state === TodoState.Add)
+          .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
         const todosBeingEdited: { [guid: string]: Api.Todo } = ts
           .filter(t => t.state === TodoState.Edit)
           .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
@@ -38,11 +41,12 @@ export function TodoListProvider<TProps>(props: TProps) {
           .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
 
         return newTodos
-          .filter(t => !!todosBeingRemoved[t.guid]) // Remove
+          .filter(t => todosBeingAdded[t.guid] === undefined)
           .map(t => {
-            // Edit and Noop
+            // Remove, Edit and Noop
             if (todosBeingEdited[t.guid]) return { state: TodoState.Edit, data: todosBeingEdited[t.guid] };
-            else return { state: TodoState.Noop, data: t };
+            if (todosBeingRemoved[t.guid]) return { state: TodoState.Remove, data: todosBeingRemoved[t.guid] };
+            return { state: TodoState.Noop, data: t };
           })
           .concat(ts.filter(t => t.state === TodoState.Add)); // Add
       });
@@ -62,6 +66,9 @@ export function TodoListProvider<TProps>(props: TProps) {
       if (!r) {
         console.error('Failed to add todo:', todo);
         setTodos(ts => ts.filter(t => t.data.guid !== guid));
+      } else {
+        // We apply the modification
+        setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Noop, data: todo } : t)));
       }
     });
   };
@@ -72,11 +79,14 @@ export function TodoListProvider<TProps>(props: TProps) {
 
     const todo = { ...prevTodo.data, done: !prevTodo.data.done };
 
-    setTodos(ts => ts.map(t => (t.data.guid === guid ? { data: todo, state: TodoState.Edit } : t)));
+    setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Edit, data: todo } : t)));
     Api.editTodo(todo).then(r => {
       if (!r) {
         console.error('Failed to edit todo:', todo);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
+      } else {
+        // We apply the modification
+        setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Noop, data: todo } : t)));
       }
     });
   };
@@ -85,11 +95,14 @@ export function TodoListProvider<TProps>(props: TProps) {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) throw new Error(`No todo available for modification given guid ${guid}`);
 
-    setTodos(ts => ts.map(t => (t.data.guid === guid ? { data: prevTodo.data, state: TodoState.Remove } : t)));
+    setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Remove, data: prevTodo.data } : t)));
     Api.removeTodo(prevTodo.data).then(r => {
       if (!r) {
         console.error('Failed to remove todo:', prevTodo.data);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
+      } else {
+        // We apply the modification
+        setTodos(ts => ts.filter(t => t.data.guid !== guid));
       }
     });
   };
