@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
-  paper: { padding: theme.spacing(2), margin: 'auto', display: 'flex' }
+  paper: { padding: theme.spacing(2), margin: 'auto', display: 'flex', alignItems: 'center' }
 }));
 
 type Props = { todo: TodoType; toggle: () => void; remove: () => void };
