@@ -5,15 +5,20 @@ type LoginSuccess = {
   token: string;
 };
 const validPassword = 'password';
-const validToken = 'w€lc0Me';
+
+const getValidToken = () => {
+  const token = (window as any).validToken || 'w€lc0Me';
+  (window as any).validToken = token;
+  return token;
+};
 
 export const login = (username: string, password: string): Promise<LoginSuccess> => {
   if (password !== validPassword) return failure(500);
-  return success({ username, token: validToken }, 500);
+  return success({ username, token: getValidToken() }, 500);
 };
 
 export const checkToken = (token: string): Promise<boolean> => {
-  if (token !== validToken) return success(false, 500);
+  if (token !== getValidToken()) return success(false, 500);
   return success(true, 500);
 };
 
@@ -51,7 +56,11 @@ const readTodos = (): Todo[] => {
   return JSON.parse(raw);
 };
 
-export const addTodoListener = (fn: (todos: Todo[]) => void): TodoListenerHandle => {
+export const addTodoListener = (
+  token: string,
+  fn: (todos: Todo[]) => void,
+  connectionLost: () => void
+): TodoListenerHandle => {
   const handle: TodoListenerHandle = { _i: {} };
 
   const changeDetected = (newData: Todo[]) => {
@@ -64,6 +73,11 @@ export const addTodoListener = (fn: (todos: Todo[]) => void): TodoListenerHandle
     return false;
   };
   const detectChanges = () => {
+    if (token !== getValidToken()) {
+      handle._i._handleId = undefined;
+      connectionLost();
+      return;
+    }
     const newData = readTodos();
     if (changeDetected(newData)) {
       handle._i._data = newData;
@@ -82,8 +96,9 @@ export const removeTodoListener = (handle: TodoListenerHandle): void => {
   }
 };
 
-export const addTodo = async (todo: Todo): Promise<boolean> => {
+export const addTodo = async (token: string, todo: Todo): Promise<boolean> => {
   await delay(500);
+  if (token !== getValidToken()) return false;
 
   const data = readTodos();
   if (data.some(t => t.guid === todo.guid)) return false;
@@ -92,8 +107,9 @@ export const addTodo = async (todo: Todo): Promise<boolean> => {
   return true;
 };
 
-export const editTodo = async (todo: Todo): Promise<boolean> => {
+export const editTodo = async (token: string, todo: Todo): Promise<boolean> => {
   await delay(500);
+  if (token !== getValidToken()) return false;
 
   const data = readTodos();
   if (!data.some(t => t.guid === todo.guid)) return false;
@@ -102,8 +118,9 @@ export const editTodo = async (todo: Todo): Promise<boolean> => {
   return true;
 };
 
-export const removeTodo = async (todo: Todo): Promise<boolean> => {
+export const removeTodo = async (token: string, todo: Todo): Promise<boolean> => {
   await delay(500);
+  if (token !== getValidToken()) return false;
 
   const data = readTodos();
   if (!data.some(t => t.guid === todo.guid)) return false;

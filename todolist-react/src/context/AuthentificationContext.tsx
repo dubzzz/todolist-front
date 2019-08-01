@@ -13,7 +13,7 @@ export type AuthentificationContextType = {
   token: string;
   state: AuthentificationState;
   login: (user: string, pass: string) => void;
-  logout: () => void;
+  logout: (silent?: boolean) => void;
 };
 
 const defaultAuthentification = {} as AuthentificationContextType;
@@ -61,13 +61,13 @@ export function AuthentificationProvider<TProps>(props: TProps) {
     }
   };
 
-  const logout = () => {
+  const logout = (silent?: boolean) => {
     setToken('');
     setAuthState(AuthentificationState.NonAuthentificated);
 
     Api.clearStorage('AuthentificationProvider', 'username');
     Api.clearStorage('AuthentificationProvider', 'token');
-    success('Logout successful');
+    if (!silent) success('Logout successful');
   };
 
   return <AuthentificationContext.Provider value={{ username, token, state: authState, login, logout }} {...props} />;

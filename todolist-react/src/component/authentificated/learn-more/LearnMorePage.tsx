@@ -24,6 +24,12 @@ export default function LearnMorePage(props: Props) {
         and subject to failures. Any data that needs to be persisted such as authentification tokens or todos are stored
         within the local storage of the browser in use.
       </Typography>
+      <Typography variant="h4" component="h2">
+        Revoke token
+      </Typography>
+      <Typography>
+        The token used and stored to keep the user connected to the API can be revoked by updating the value of <em>window.validToken</em> in the console.
+      </Typography>
     </>
   );
 }

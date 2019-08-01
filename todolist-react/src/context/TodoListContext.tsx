@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
 import { useNotification } from './NotificationContext';
+import { useAuthentification } from './AuthentificationContext';
 
 export enum TodoState {
   Noop = 'noop',
@@ -25,6 +26,7 @@ const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
   const { error } = useNotification();
+  const { token, logout } = useAuthentification();
   const [ready, setReady] = useState(false);
   const [todos, setTodos] = useState([] as TodoType[]);
 
@@ -53,9 +55,12 @@ export function TodoListProvider<TProps>(props: TProps) {
           .concat(ts.filter(t => t.state === TodoState.Add)); // Add
       });
     };
-    const handle = Api.addTodoListener(listener);
+    const handle = Api.addTodoListener(token, listener, () => {
+      error('Revoked token, connection lost');
+      logout(true);
+    });
     return () => Api.removeTodoListener(handle);
-  }, []);
+  }, [token, logout, error]);
 
   const addTodo = (task: string) => {
     const guid = Math.random()
@@ -64,7 +69,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     const todo = { guid, task, done: false };
 
     setTodos(ts => [...ts, { state: TodoState.Add, data: todo }]);
-    Api.addTodo(todo).then(r => {
+    Api.addTodo(token, todo).then(r => {
       if (!r) {
         error(`Failed to add todo: ${todo.task}`);
         setTodos(ts => ts.filter(t => t.data.guid !== guid));
@@ -85,7 +90,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     const todo = { ...prevTodo.data, done: !prevTodo.data.done };
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Edit, data: todo } : t)));
-    Api.editTodo(todo).then(r => {
+    Api.editTodo(token, todo).then(r => {
       if (!r) {
         error(`Failed to edit todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
@@ -104,7 +109,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     }
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Remove, data: prevTodo.data } : t)));
-    Api.removeTodo(prevTodo.data).then(r => {
+    Api.removeTodo(token, prevTodo.data).then(r => {
       if (!r) {
         error(`Failed to remove todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
