@@ -9,7 +9,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useTodoList } from '../../context/TodoListContext';
+import { useTodoList, TodoState } from '../../context/TodoListContext';
 import Badge from '@material-ui/core/Badge';
 
 const drawerWidth = 240;
@@ -61,7 +61,10 @@ export default function AppHeader(props: Props) {
           Welcome {username}
         </Typography>
         <IconButton>
-          <Badge badgeContent={ready ? `${todos.length}` : '?'} color="primary">
+          <Badge
+            badgeContent={ready ? `${todos.filter(t => t.state !== TodoState.Remove).length}` : '?'}
+            color="primary"
+          >
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
