@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
+import { useNotification } from './NotificationContext';
 
 export enum TodoState {
   Noop = 'noop',
@@ -23,6 +24,7 @@ const defaultTodoList = {} as TodoListContextType;
 const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
+  const { error } = useNotification();
   const [ready, setReady] = useState(false);
   const [todos, setTodos] = useState([] as TodoType[]);
 
@@ -64,7 +66,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     setTodos(ts => [...ts, { state: TodoState.Add, data: todo }]);
     Api.addTodo(todo).then(r => {
       if (!r) {
-        console.error('Failed to add todo:', todo);
+        error(`Failed to add todo: ${todo.task}`);
         setTodos(ts => ts.filter(t => t.data.guid !== guid));
       } else {
         // We apply the modification
@@ -75,14 +77,17 @@ export function TodoListProvider<TProps>(props: TProps) {
 
   const toggleTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
-    if (!prevTodo) throw new Error(`No todo available for modification given guid ${guid}`);
+    if (!prevTodo) {
+      error(`No todo available for modification given guid ${guid}`);
+      return;
+    }
 
     const todo = { ...prevTodo.data, done: !prevTodo.data.done };
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Edit, data: todo } : t)));
     Api.editTodo(todo).then(r => {
       if (!r) {
-        console.error('Failed to edit todo:', todo);
+        error(`Failed to edit todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification
@@ -93,12 +98,15 @@ export function TodoListProvider<TProps>(props: TProps) {
 
   const removeTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
-    if (!prevTodo) throw new Error(`No todo available for modification given guid ${guid}`);
+    if (!prevTodo) {
+      error(`No todo available for modification given guid ${guid}`);
+      return;
+    }
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Remove, data: prevTodo.data } : t)));
     Api.removeTodo(prevTodo.data).then(r => {
       if (!r) {
-        console.error('Failed to remove todo:', prevTodo.data);
+        error(`Failed to remove todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification

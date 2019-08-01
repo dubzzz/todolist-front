@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
+import { useNotification } from './NotificationContext';
 
 export enum AuthentificationState {
   NonAuthentificated = 'NonAuthentificated',
@@ -19,6 +20,7 @@ const defaultAuthentification = {} as AuthentificationContextType;
 const AuthentificationContext = createContext(defaultAuthentification);
 
 export function AuthentificationProvider<TProps>(props: TProps) {
+  const { success, error } = useNotification();
   const [username, setUsername] = useState(() => Api.readStorage('AuthentificationProvider', 'username'));
   const [token, setToken] = useState(() => Api.readStorage('AuthentificationProvider', 'token'));
   const [authState, setAuthState] = useState(AuthentificationState.OnGoingAuthentification);
@@ -35,6 +37,12 @@ export function AuthentificationProvider<TProps>(props: TProps) {
     if (authState !== AuthentificationState.Authentificated) checkToken();
   }, [username, token, authState]);
 
+  useEffect(() => {
+    if (authState === AuthentificationState.Authentificated) {
+      success('Login successful');
+    }
+  }, [authState, success]);
+
   const login = async (user: string, pass: string) => {
     if (authState !== AuthentificationState.NonAuthentificated) {
       console.error(`Unable to login, current state is ${authState} for user ${username}`);
@@ -49,6 +57,7 @@ export function AuthentificationProvider<TProps>(props: TProps) {
       setAuthState(AuthentificationState.Authentificated);
     } catch (err) {
       setAuthState(AuthentificationState.NonAuthentificated);
+      error(`Login failure`);
     }
   };
 
@@ -58,6 +67,7 @@ export function AuthentificationProvider<TProps>(props: TProps) {
 
     Api.clearStorage('AuthentificationProvider', 'username');
     Api.clearStorage('AuthentificationProvider', 'token');
+    success('Logout successful');
   };
 
   return <AuthentificationContext.Provider value={{ username, token, state: authState, login, logout }} {...props} />;
