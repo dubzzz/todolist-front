@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = { drawerOpened: boolean; toggleDrawer: () => void } & RouteComponentProps;
 
-function AppMenu(props: Props) {
+function AuthentificatedMenu(props: Props) {
   const classes = useStyles();
   const AppMenuTooltip = (tooltipProps: { title: string; children: ReactElement }) => {
     if (props.drawerOpened) {
@@ -96,4 +96,4 @@ function AppMenu(props: Props) {
   );
 }
 
-export default withRouter(AppMenu);
+export default withRouter(AuthentificatedMenu);

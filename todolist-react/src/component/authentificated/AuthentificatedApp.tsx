@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppHeader from './AppHeader';
+import AuthentificatedHeader from './AuthentificatedHeader';
 import { TodoListProvider } from '../../context/TodoListContext';
-import AppMenu from './AppMenu';
+import AppMenu from './AuthentificatedMenu';
 import { Switch, Route } from 'react-router-dom';
 
-const LearnMorePage = React.lazy(() => import('../learn-more/LearnMorePage'));
-const ListPage = React.lazy(() => import('../list/ListPage'));
-const NotFoundPage = React.lazy(() => import('../not-found/NotFoundPage'));
+const LearnMorePage = React.lazy(() => import('./learn-more/LearnMorePage'));
+const ListPage = React.lazy(() => import('./list/ListPage'));
+const NotFoundPage = React.lazy(() => import('./not-found/NotFoundPage'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {};
 
-export default function AppPage(props: Props) {
+export default function AuthentificatedApp(props: Props) {
   const classes = useStyles();
   const [drawerOpened, setDrawerOpened] = useState(false);
 
@@ -33,7 +33,7 @@ export default function AppPage(props: Props) {
     <div className={classes.root}>
       <TodoListProvider>
         <CssBaseline />
-        <AppHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
+        <AuthentificatedHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <AppMenu drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <main className={classes.content}>
           <div className={classes.appBarSpacer}></div>

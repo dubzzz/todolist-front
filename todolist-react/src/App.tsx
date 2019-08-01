@@ -5,12 +5,12 @@ import { withAuthentificated } from './hoc/Authentificated';
 import { AuthentificationProvider } from './context/AuthentificationContext';
 import LoginPage from './component/login/LoginPage';
 
-const loadAppPage = () => import('./component/app/AppPage');
-const AppPage = React.lazy(loadAppPage);
+const loadAuthentificatedApp = () => import('./component/authentificated/AuthentificatedApp');
+const AuthentificatedApp = React.lazy(loadAuthentificatedApp);
 
 const App: React.FC = () => {
   useEffect(() => {
-    loadAppPage();
+    loadAuthentificatedApp();
   }, []);
   return (
     <div className="App">
@@ -18,7 +18,7 @@ const App: React.FC = () => {
         <Router>
           <Switch>
             <Route exact path="/login" component={LoginPage} />
-            <Route component={withAuthentificated(AppPage)} />
+            <Route component={withAuthentificated(AuthentificatedApp)} />
           </Switch>
         </Router>
       </AuthentificationProvider>

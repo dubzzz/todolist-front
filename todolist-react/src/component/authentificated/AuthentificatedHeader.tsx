@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = { drawerOpened: boolean; toggleDrawer: () => void };
 
-export default function AppHeader(props: Props) {
+export default function AuthentificatedHeader(props: Props) {
   const classes = useStyles();
   const { username, logout } = useAuthentification();
   const { ready, todos } = useTodoList();
