@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "2523284c5c5659e32ea9aa2de8fce604",
+    "revision": "363c5fe01fc8aeeec9d483901b7f9b4c",
     "url": "/todolist-front/todolist-react/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/todolist-front/todolist-react/static/js/4.25eedf88.chunk.js"
   },
   {
-    "revision": "f4d8efd53f57e4b9edae",
-    "url": "/todolist-front/todolist-react/static/js/5.fa1496f5.chunk.js"
+    "revision": "ddeb81061366f33c61cd",
+    "url": "/todolist-front/todolist-react/static/js/5.c664ff21.chunk.js"
   },
   {
     "revision": "90dbc25d6ba8e7508df0",
@@ -32,7 +32,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/todolist-front/todolist-react/static/js/main.a698a5fe.chunk.js"
   },
   {
-    "revision": "0ca92ca3920c5644d0c1",
-    "url": "/todolist-front/todolist-react/static/js/runtime~main.7be7259f.js"
+    "revision": "d09d839befd173f4fc16",
+    "url": "/todolist-front/todolist-react/static/js/runtime~main.2dd4460f.js"
   }
 ]);
