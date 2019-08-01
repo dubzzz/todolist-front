@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
-  paper: { padding: theme.spacing(2), margin: 'auto' }
+  paper: { padding: theme.spacing(2), margin: 'auto', display: 'flex' }
 }));
 
 type Props = { todo: TodoType; toggle: () => void; remove: () => void };
@@ -30,7 +30,8 @@ export default function TodoItem(props: Props) {
       <span
         style={{
           textDecoration: props.todo.state === TodoState.Remove ? 'line-through' : 'none',
-          color: disabled ? 'grey' : 'black'
+          color: disabled ? 'grey' : 'black',
+          flexGrow: 1
         }}
       >
         {props.todo.data.task}
@@ -39,7 +40,7 @@ export default function TodoItem(props: Props) {
         style={{ margin: '1em', visibility: props.todo.state === TodoState.Noop ? 'hidden' : 'visible' }}
         size={12}
       />
-      <IconButton style={{ float: 'right' }} aria-label="delete" disabled={disabled} onClick={() => props.remove()}>
+      <IconButton aria-label="delete" disabled={disabled} onClick={() => props.remove()}>
         <DeleteIcon />
       </IconButton>
     </Paper>
