@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 import { withAuthentificated } from './hoc/Authentificated';
 import { AuthentificationProvider } from './context/AuthentificationContext';
 import { NotificationProvider } from './context/NotificationContext';
@@ -15,16 +18,18 @@ const App: React.FC = () => {
   }, []);
   return (
     <div className="App">
-      <NotificationProvider maxNotifications={3}>
-        <AuthentificationProvider>
-          <Router>
-            <Switch>
-              <Route exact path="/login" component={LoginPage} />
-              <Route component={withAuthentificated(AuthentificatedApp)} />
-            </Switch>
-          </Router>
-        </AuthentificationProvider>
-      </NotificationProvider>
+      <Provider store={store}>
+        <NotificationProvider maxNotifications={3}>
+          <AuthentificationProvider>
+            <Router>
+              <Switch>
+                <Route exact path="/login" component={LoginPage} />
+                <Route component={withAuthentificated(AuthentificatedApp)} />
+              </Switch>
+            </Router>
+          </AuthentificationProvider>
+        </NotificationProvider>
+      </Provider>
     </div>
   );
 };
