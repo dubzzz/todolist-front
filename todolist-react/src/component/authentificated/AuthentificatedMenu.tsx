@@ -45,7 +45,10 @@ const useStyles = makeStyles(theme => ({
     }
   },
   drawerSmallScreenSpacer: {
-    width: theme.spacing(7)
+    minWidth: theme.spacing(7),
+    [theme.breakpoints.up('sm')]: {
+      minWidth: theme.spacing(9)
+    }
   },
   drawerSmallScreen: {
     position: 'absolute'
