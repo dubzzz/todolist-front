@@ -3,10 +3,10 @@ node_js: "10"
 
 script:
   - cd todolist-react && yarn && yarn build && cd ..
-  - cd todolist-react-redux-sagas && yarn && yarn build && cd ..
+  - cd todolist-react-redux-saga && yarn && yarn build && cd ..
   - mkdir build
   - mv todolist-react/build build/todolist-react
-  - mv todolist-react/build build/todolist-react-redux-sagas
+  - mv todolist-react/build build/todolist-react-redux-saga
 
 deploy:
   provider: pages

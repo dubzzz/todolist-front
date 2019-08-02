@@ -1,5 +1,5 @@
 {
-  "name": "todolist-react-redux-sagas",
+  "name": "todolist-react-redux-saga",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -44,5 +44,5 @@
   "devDependencies": {
     "prettier": "1.18.2"
   },
-  "homepage": "https://dubzzz.github.io/todolist-front/todolist-react-redux-sagas/"
+  "homepage": "https://dubzzz.github.io/todolist-front/todolist-react-redux-saga/"
 }

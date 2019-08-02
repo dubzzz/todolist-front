@@ -55,7 +55,7 @@ function LoginPage(props: Props) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Welcome to TodoList React with redux-sagas
+            Welcome to TodoList React with redux-saga
           </Typography>
           <Typography className={classes.hint} color="textSecondary" gutterBottom>
             Try with password: “password”
