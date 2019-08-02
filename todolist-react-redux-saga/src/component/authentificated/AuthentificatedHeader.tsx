@@ -1,7 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAuthentification } from '../../context/AuthentificationContext';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useTodoList, TodoState } from '../../context/TodoListContext';
 import Badge from '@material-ui/core/Badge';
+import { logoutAction } from '../../redux/actions/authentication';
+import { ReduxState } from '../../redux/reducers';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -42,7 +44,8 @@ type Props = { drawerOpened: boolean; toggleDrawer: () => void };
 
 export default function AuthentificatedHeader(props: Props) {
   const classes = useStyles();
-  const { username, logout } = useAuthentification();
+  const username = useSelector((state: ReduxState) => state.authentication.username);
+  const dispatch = useDispatch();
   const { ready, todos } = useTodoList();
 
   return (
@@ -70,7 +73,7 @@ export default function AuthentificatedHeader(props: Props) {
         </IconButton>
         <IconButton
           onClick={() => {
-            logout();
+            dispatch(logoutAction());
           }}
         >
           <PowerSettingsNewIcon />

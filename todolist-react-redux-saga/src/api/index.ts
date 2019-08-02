@@ -1,6 +1,6 @@
 /* Login API */
 
-type LoginSuccess = {
+export type LoginSuccess = {
   username: string;
   token: string;
 };

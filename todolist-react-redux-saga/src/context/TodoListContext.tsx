@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Api from '../api';
 import { useNotification } from './NotificationContext';
-import { useAuthentification } from './AuthentificationContext';
+import { ReduxState } from '../redux/reducers';
+import { logoutAction } from '../redux/actions/authentication';
 
 export enum TodoState {
   Noop = 'noop',
@@ -26,7 +28,8 @@ const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
   const { error } = useNotification();
-  const { token, logout } = useAuthentification();
+  const token = useSelector((state: ReduxState) => state.authentication.token);
+  const dispatch = useDispatch();
   const [ready, setReady] = useState(false);
   const [todos, setTodos] = useState([] as TodoType[]);
 
@@ -57,10 +60,10 @@ export function TodoListProvider<TProps>(props: TProps) {
     };
     const handle = Api.addTodoListener(token, listener, () => {
       error('Revoked token, connection lost');
-      logout(true);
+      dispatch(logoutAction());
     });
     return () => Api.removeTodoListener(handle);
-  }, [token, logout, error]);
+  }, [token, dispatch, error]);
 
   const addTodo = (task: string) => {
     const guid = Math.random()

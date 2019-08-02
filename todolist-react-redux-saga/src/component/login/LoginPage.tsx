@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,8 +10,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
-
-import { useAuthentification, AuthentificationState } from '../../context/AuthentificationContext';
+import { ReduxState } from '../../redux/reducers';
+import { AuthentificationState } from '../../redux/reducers/authentication';
+import { tryLoginByCredsAction } from '../../redux/actions/authentication';
 
 const useStyles = makeStyles({
   cardContainer: {
@@ -33,7 +35,8 @@ type Props = {} & RouteComponentProps;
 
 function LoginPage(props: Props) {
   const classes = useStyles();
-  const { state, login } = useAuthentification();
+  const state = useSelector((state: ReduxState) => state.authentication.state);
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -66,7 +69,7 @@ function LoginPage(props: Props) {
             onChange={p => setUsername(p.currentTarget.value)}
             onKeyPress={ev => {
               if (ev.which === 13 && canLogin) {
-                login(username, password);
+                dispatch(tryLoginByCredsAction(username, password));
                 ev.preventDefault();
               }
             }}
@@ -79,14 +82,18 @@ function LoginPage(props: Props) {
             onChange={p => setPassword(p.currentTarget.value)}
             onKeyPress={ev => {
               if (ev.which === 13 && canLogin) {
-                login(username, password);
+                dispatch(tryLoginByCredsAction(username, password));
                 ev.preventDefault();
               }
             }}
           />
         </CardContent>
         <CardActions>
-          <Button color="primary" disabled={!canLogin} onClick={() => login(username, password)}>
+          <Button
+            color="primary"
+            disabled={!canLogin}
+            onClick={() => dispatch(tryLoginByCredsAction(username, password))}
+          >
             Login
           </Button>
           {onGoingLogin ? <CircularProgress size={24} /> : <></>}
