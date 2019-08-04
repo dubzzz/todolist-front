@@ -26,13 +26,13 @@ export default function(state = initialState, action: Actions) {
   switch (action.type) {
     case AUTHENTICATION_LOGIN_SUCCESS: {
       const { username, token } = action.payload;
-      return { ...state, username, token, authState: AuthentificationState.Authentificated };
+      return { ...state, username, token, state: AuthentificationState.Authentificated };
     }
     case AUTHENTICATION_LOGIN_FAILURE: {
-      return { ...state, authState: AuthentificationState.NonAuthentificated };
+      return { ...state, state: AuthentificationState.NonAuthentificated };
     }
     case AUTHENTICATION_LOGIN_ON_GOING: {
-      return { ...state, authState: AuthentificationState.OnGoingAuthentification };
+      return { ...state, state: AuthentificationState.OnGoingAuthentification };
     }
     default:
       return state;
