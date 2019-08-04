@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useTodoList, TodoState } from '../../context/TodoListContext';
 import Badge from '@material-ui/core/Badge';
-import { logoutAction } from '../../redux/actions/authentication';
+import { tryLogoutAction } from '../../redux/actions/authentication';
 import { ReduxState } from '../../redux/reducers';
 
 const drawerWidth = 240;
@@ -73,7 +73,7 @@ export default function AuthentificatedHeader(props: Props) {
         </IconButton>
         <IconButton
           onClick={() => {
-            dispatch(logoutAction());
+            dispatch(tryLogoutAction());
           }}
         >
           <PowerSettingsNewIcon />

@@ -14,8 +14,13 @@ export const tryLoginByTokenAction = () =>
   } as const);
 export const tryLoginByCredsAction = (username: string, password: string) =>
   ({
-    type: AUTHENTICATION_TRY_LOGIN_BY_TOKEN,
+    type: AUTHENTICATION_TRY_LOGIN_BY_CREDS,
     payload: { username, password }
+  } as const);
+export const tryLogoutAction = () =>
+  ({
+    type: AUTHENTICATION_LOGOUT,
+    payload: {}
   } as const);
 export const loginSuccessAction = (username: string, token: string) =>
   ({
@@ -32,18 +37,13 @@ export const loginOnGoingAction = () =>
     type: AUTHENTICATION_LOGIN_ON_GOING,
     payload: {}
   } as const);
-export const logoutAction = () =>
-  ({
-    type: AUTHENTICATION_LOGOUT,
-    payload: {}
-  } as const);
 
 export type ActionTryLoginByToken = ReturnType<typeof tryLoginByTokenAction>;
 export type ActionTryLoginByCreds = ReturnType<typeof tryLoginByCredsAction>;
 export type ActionLoginSuccess = ReturnType<typeof loginSuccessAction>;
 export type ActionLoginFailure = ReturnType<typeof loginFailureAction>;
 export type ActionLoginOnGoing = ReturnType<typeof loginOnGoingAction>;
-export type ActionLogout = ReturnType<typeof logoutAction>;
+export type ActionLogout = ReturnType<typeof tryLogoutAction>;
 export type Actions =
   | ActionTryLoginByToken
   | ActionTryLoginByCreds

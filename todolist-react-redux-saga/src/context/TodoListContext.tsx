@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as Api from '../api';
 import { useNotification } from './NotificationContext';
 import { ReduxState } from '../redux/reducers';
-import { logoutAction } from '../redux/actions/authentication';
+import { tryLogoutAction } from '../redux/actions/authentication';
 
 export enum TodoState {
   Noop = 'noop',
@@ -60,7 +60,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     };
     const handle = Api.addTodoListener(token, listener, () => {
       error('Revoked token, connection lost');
-      dispatch(logoutAction());
+      dispatch(tryLogoutAction());
     });
     return () => Api.removeTodoListener(handle);
   }, [token, dispatch, error]);
