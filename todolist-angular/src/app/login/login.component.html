@@ -1,5 +1,5 @@
 <div id="content">
-  <mat-card>
+  <mat-card *ngIf="authStatus$ | async as authStatus">
     <img
       mat-card-image
       src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Eiffel_Tower_and_the_Trocadero%2C_Exposition_Universal%2C_1900%2C_Paris%2C_France.jpg"
@@ -17,7 +17,7 @@
           placeholder="Username"
           [value]="username"
           (input)="username = usernameBox.value"
-          (keyup.enter)="login()"
+          (keyup.enter)="login(authStatus)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -28,7 +28,7 @@
           [type]="hide ? 'password' : 'text'"
           [value]="password"
           (input)="password = passwordBox.value"
-          (keyup.enter)="login()"
+          (keyup.enter)="login(authStatus)"
         /><button
           mat-icon-button
           matSuffix
@@ -41,8 +41,12 @@
       >
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button [disabled]="!canLogin()">
-        Login
+      <button
+        mat-button
+        [disabled]="!canLogin(authStatus)"
+        (click)="login(authStatus)"
+      >
+        {{ onGoingLogin(authStatus) ? "..." : "Login" }}
       </button>
     </mat-card-actions>
   </mat-card>

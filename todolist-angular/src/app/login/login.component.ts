@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription, Observable } from "rxjs";
+import { AuthService, AuthState, AuthStatus } from "../auth/auth.service";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
@@ -11,26 +13,51 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   redirect?: string;
 
+  authStatus$: Observable<AuthStatus>;
   username: string = "";
   password: string = "";
   hide: boolean = true;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.authStatus$ = this.authService.state$.pipe(map(s => s.status));
     this.subscription.add(
       this.route.queryParams.subscribe(
         params => (this.redirect = params["redirect"])
       )
     );
+    this.subscription.add(
+      this.authService.state$.subscribe(s => {
+        if (s.status !== AuthStatus.Authenticated) {
+          return;
+        }
+        this.router.navigate([this.redirect || "/"]);
+      })
+    );
   }
 
-  canLogin() {
-    return this.username.length > 0 && this.password.length > 0;
+  canLogin(authStatus: AuthStatus) {
+    return (
+      authStatus === AuthStatus.NonAuthenticated &&
+      this.username.length > 0 &&
+      this.password.length > 0
+    );
   }
 
-  login() {
-    if (!this.canLogin()) return;
+  onGoingLogin(authStatus: AuthStatus) {
+    return authStatus === AuthStatus.OnGoingAuthentication;
+  }
+
+  login(authStatus: AuthStatus) {
+    if (!this.canLogin(authStatus)) {
+      return;
+    }
+    this.authService.login(this.username, this.password);
   }
 
   ngOnDestroy() {
