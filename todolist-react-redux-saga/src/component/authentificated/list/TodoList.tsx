@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { useTodoList } from '../../../context/TodoListContext';
 import TextField from '@material-ui/core/TextField';
 import TodoItem from './TodoItem';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSelector, useDispatch } from 'react-redux';
+import { ReduxState } from '../../../redux/reducers';
+import { tryAddTodoAction, tryToggleTodoAction, tryRemoveTodoAction } from '../../../redux/actions/todolist';
 
 type Props = {};
 
 export default function TodoList(props: Props) {
-  const { ready, todos, addTodo, toggleTodo, removeTodo } = useTodoList();
+  const token = useSelector((state: ReduxState) => state.authentication.token);
+  const ready = useSelector((state: ReduxState) => state.todolist.ready);
+  const todos = useSelector((state: ReduxState) => state.todolist.todos);
+  const dispatch = useDispatch();
   const [newTodo, setNewTodo] = useState('');
 
   return (
@@ -20,7 +25,7 @@ export default function TodoList(props: Props) {
           onChange={p => setNewTodo(p.currentTarget.value)}
           onKeyPress={ev => {
             if (ev.which === 13 && newTodo !== '') {
-              addTodo(newTodo);
+              dispatch(tryAddTodoAction(token, newTodo));
               setNewTodo('');
               ev.preventDefault();
             }
@@ -30,7 +35,7 @@ export default function TodoList(props: Props) {
         <Button
           disabled={newTodo === ''}
           onClick={() => {
-            addTodo(newTodo);
+            dispatch(tryAddTodoAction(token, newTodo));
             setNewTodo('');
           }}
         >
@@ -43,8 +48,8 @@ export default function TodoList(props: Props) {
             <TodoItem
               key={t.data.guid}
               todo={t}
-              toggle={() => toggleTodo(t.data.guid)}
-              remove={() => removeTodo(t.data.guid)}
+              toggle={() => dispatch(tryToggleTodoAction(token, t.data.guid))}
+              remove={() => dispatch(tryRemoveTodoAction(token, t.data.guid))}
             />
           ))}
         </div>
