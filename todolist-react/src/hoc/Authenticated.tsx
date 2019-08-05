@@ -1,17 +1,15 @@
 import React, { Suspense } from 'react';
+import { useAuthentication, AuthenticationState } from '../context/AuthenticationContext';
 import { Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
-import { AuthentificationState } from '../redux/reducers/authentication';
-import { ReduxState } from '../redux/reducers';
 
 type Props = { children: JSX.Element | JSX.Element[] } & RouteComponentProps;
 
-function AuthentificationWrapper(props: Props) {
-  const state = useSelector((state: ReduxState) => state.authentication.state);
+function AuthenticationWrapper(props: Props) {
+  const { state } = useAuthentication();
   switch (state) {
-    case AuthentificationState.OnGoingAuthentification:
-    case AuthentificationState.NonAuthentificated:
+    case AuthenticationState.OnGoingAuthentication:
+    case AuthenticationState.NonAuthenticated:
       return (
         <Redirect
           to={{
@@ -20,13 +18,13 @@ function AuthentificationWrapper(props: Props) {
           }}
         />
       );
-    case AuthentificationState.Authentificated:
+    case AuthenticationState.Authenticated:
       return <Suspense fallback={<CircularProgress />}>{props.children}</Suspense>;
   }
 }
 
-export function withAuthentificated<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
-  const Wrapper = withRouter(AuthentificationWrapper);
+export function withAuthenticated<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
+  const Wrapper = withRouter(AuthenticationWrapper);
   return (props: P) => (
     <Wrapper>
       <WrappedComponent {...props} />

@@ -10,7 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 
-import { useAuthentification, AuthentificationState } from '../../context/AuthentificationContext';
+import { useAuthentication, AuthenticationState } from '../../context/AuthenticationContext';
 
 const useStyles = makeStyles({
   cardContainer: {
@@ -33,14 +33,14 @@ type Props = {} & RouteComponentProps;
 
 function LoginPage(props: Props) {
   const classes = useStyles();
-  const { state, login } = useAuthentification();
+  const { state, login } = useAuthentication();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const canLogin = state === AuthentificationState.NonAuthentificated && username && password;
-  const onGoingLogin = state === AuthentificationState.OnGoingAuthentification;
+  const canLogin = state === AuthenticationState.NonAuthenticated && username && password;
+  const onGoingLogin = state === AuthenticationState.OnGoingAuthentication;
 
-  if (state === AuthentificationState.Authentificated) {
+  if (state === AuthenticationState.Authenticated) {
     const params = new URLSearchParams(props.location.search);
     const redirect = params.get('redirect') || '/';
     return <Redirect to={redirect} />;

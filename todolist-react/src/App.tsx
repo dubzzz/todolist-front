@@ -1,29 +1,29 @@
 import React, { useEffect } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { withAuthentificated } from './hoc/Authentificated';
-import { AuthentificationProvider } from './context/AuthentificationContext';
+import { withAuthenticated } from './hoc/Authenticated';
+import { AuthenticationProvider } from './context/AuthenticationContext';
 import { NotificationProvider } from './context/NotificationContext';
 import LoginPage from './component/login/LoginPage';
 
-const loadAuthentificatedApp = () => import('./component/authentificated/AuthentificatedApp');
-const AuthentificatedApp = React.lazy(loadAuthentificatedApp);
+const loadAuthenticatedApp = () => import('./component/authenticated/AuthenticatedApp');
+const AuthenticatedApp = React.lazy(loadAuthenticatedApp);
 
 const App: React.FC = () => {
   useEffect(() => {
-    loadAuthentificatedApp();
+    loadAuthenticatedApp();
   }, []);
   return (
     <div className="App">
       <NotificationProvider maxNotifications={3}>
-        <AuthentificationProvider>
+        <AuthenticationProvider>
           <Router>
             <Switch>
               <Route exact path="/login" component={LoginPage} />
-              <Route component={withAuthentificated(AuthentificatedApp)} />
+              <Route component={withAuthenticated(AuthenticatedApp)} />
             </Switch>
           </Router>
-        </AuthentificationProvider>
+        </AuthenticationProvider>
       </NotificationProvider>
     </div>
   );

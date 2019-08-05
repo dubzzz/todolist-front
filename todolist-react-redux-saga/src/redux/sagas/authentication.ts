@@ -17,8 +17,8 @@ import { NotificationLevel } from '../reducers/notification';
 import { notifyAction } from '../actions/notification';
 
 function persistTokens(username: string, token: string) {
-  Api.writeStorage('AuthentificationProvider', 'username', username);
-  Api.writeStorage('AuthentificationProvider', 'token', token);
+  Api.writeStorage('AuthenticationProvider', 'username', username);
+  Api.writeStorage('AuthenticationProvider', 'token', token);
 }
 
 function* tryLoginByCreds(action: ActionTryLoginByCreds) {
@@ -36,8 +36,8 @@ function* tryLoginByCreds(action: ActionTryLoginByCreds) {
 }
 
 function* tryLoginByToken(action: ActionTryLoginByToken) {
-  const username = Api.readStorage('AuthentificationProvider', 'username');
-  const token = Api.readStorage('AuthentificationProvider', 'token');
+  const username = Api.readStorage('AuthenticationProvider', 'username');
+  const token = Api.readStorage('AuthenticationProvider', 'token');
   if (token === '') return;
 
   yield put(loginOnGoingAction());
@@ -52,8 +52,8 @@ function* tryLoginByToken(action: ActionTryLoginByToken) {
 
 function* logout(action: ActionLogout) {
   const { silent } = action.payload;
-  Api.clearStorage('AuthentificationProvider', 'username');
-  Api.clearStorage('AuthentificationProvider', 'token');
+  Api.clearStorage('AuthenticationProvider', 'username');
+  Api.clearStorage('AuthenticationProvider', 'token');
   yield put(loginFailureAction());
   if (!silent) yield put(notifyAction('Logout successful', NotificationLevel.Success));
 }

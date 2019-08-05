@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import { ReduxState } from '../../redux/reducers';
-import { AuthentificationState } from '../../redux/reducers/authentication';
+import { AuthenticationStatus } from '../../redux/reducers/authentication';
 import { tryLoginByCredsAction } from '../../redux/actions/authentication';
 
 const useStyles = makeStyles({
@@ -35,15 +35,15 @@ type Props = {} & RouteComponentProps;
 
 function LoginPage(props: Props) {
   const classes = useStyles();
-  const state = useSelector((state: ReduxState) => state.authentication.state);
+  const status = useSelector((state: ReduxState) => state.authentication.status);
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const canLogin = state === AuthentificationState.NonAuthentificated && username && password;
-  const onGoingLogin = state === AuthentificationState.OnGoingAuthentification;
+  const canLogin = status === AuthenticationStatus.NonAuthenticated && username && password;
+  const onGoingLogin = status === AuthenticationStatus.OnGoingAuthentication;
 
-  if (state === AuthentificationState.Authentificated) {
+  if (status === AuthenticationStatus.Authenticated) {
     const params = new URLSearchParams(props.location.search);
     const redirect = params.get('redirect') || '/';
     return <Redirect to={redirect} />;

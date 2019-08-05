@@ -2,20 +2,20 @@ import React, { useEffect } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { withAuthentificated } from './hoc/Authentificated';
+import { withAuthenticated } from './hoc/Authenticated';
 import LoginPage from './component/login/LoginPage';
 import { tryLoginByTokenAction } from './redux/actions/authentication';
 import Notifier from './component/Notifier';
 import { SnackbarProvider } from 'notistack';
 
-const loadAuthentificatedApp = () => import('./component/authentificated/AuthentificatedApp');
-const AuthentificatedApp = React.lazy(loadAuthentificatedApp);
+const loadAuthenticatedApp = () => import('./component/authenticated/AuthenticatedApp');
+const AuthenticatedApp = React.lazy(loadAuthenticatedApp);
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    loadAuthentificatedApp();
+    loadAuthenticatedApp();
   }, []);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const App: React.FC = () => {
         <Router>
           <Switch>
             <Route exact path="/login" component={LoginPage} />
-            <Route component={withAuthentificated(AuthentificatedApp)} />
+            <Route component={withAuthenticated(AuthenticatedApp)} />
           </Switch>
         </Router>
       </SnackbarProvider>

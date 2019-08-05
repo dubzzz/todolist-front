@@ -5,34 +5,34 @@ import {
   AUTHENTICATION_LOGIN_ON_GOING
 } from '../actions/authentication';
 
-export enum AuthentificationState {
-  NonAuthentificated = 'NonAuthentificated',
-  OnGoingAuthentification = 'OnGoingAuthentification',
-  Authentificated = 'Authentificated'
+export enum AuthenticationStatus {
+  NonAuthenticated = 'NonAuthenticated',
+  OnGoingAuthentication = 'OnGoingAuthentication',
+  Authenticated = 'Authenticated'
 }
 
 export type AuthenticationState = {
   username: string;
   token: string;
-  state: AuthentificationState;
+  status: AuthenticationStatus;
 };
 const initialState: AuthenticationState = {
   username: '',
   token: '',
-  state: AuthentificationState.NonAuthentificated
+  status: AuthenticationStatus.NonAuthenticated
 };
 
 export default function(state = initialState, action: Actions) {
   switch (action.type) {
     case AUTHENTICATION_LOGIN_SUCCESS: {
       const { username, token } = action.payload;
-      return { ...state, username, token, state: AuthentificationState.Authentificated };
+      return { ...state, username, token, state: AuthenticationStatus.Authenticated };
     }
     case AUTHENTICATION_LOGIN_FAILURE: {
-      return { ...state, state: AuthentificationState.NonAuthentificated };
+      return { ...state, state: AuthenticationStatus.NonAuthenticated };
     }
     case AUTHENTICATION_LOGIN_ON_GOING: {
-      return { ...state, state: AuthentificationState.OnGoingAuthentification };
+      return { ...state, state: AuthenticationStatus.OnGoingAuthentication };
     }
     default:
       return state;

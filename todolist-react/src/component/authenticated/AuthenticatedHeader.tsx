@@ -1,7 +1,7 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuthentication } from '../../context/AuthenticationContext';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -9,10 +9,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useTodoList, TodoState } from '../../context/TodoListContext';
 import Badge from '@material-ui/core/Badge';
-import { tryLogoutAction } from '../../redux/actions/authentication';
-import { ReduxState } from '../../redux/reducers';
-import { TodoState } from '../../redux/reducers/todolist';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -42,12 +40,10 @@ const useStyles = makeStyles(theme => ({
 
 type Props = { drawerOpened: boolean; toggleDrawer: () => void };
 
-export default function AuthentificatedHeader(props: Props) {
+export default function AuthenticatedHeader(props: Props) {
   const classes = useStyles();
-  const username = useSelector((state: ReduxState) => state.authentication.username);
-  const ready = useSelector((state: ReduxState) => state.todolist.ready);
-  const todos = useSelector((state: ReduxState) => state.todolist.todos);
-  const dispatch = useDispatch();
+  const { username, logout } = useAuthentication();
+  const { ready, todos } = useTodoList();
 
   return (
     <AppBar position="absolute" className={clsx(classes.appBar, props.drawerOpened && classes.appBarShift)}>
@@ -74,7 +70,7 @@ export default function AuthentificatedHeader(props: Props) {
         </IconButton>
         <IconButton
           onClick={() => {
-            dispatch(tryLogoutAction());
+            logout();
           }}
         >
           <PowerSettingsNewIcon />

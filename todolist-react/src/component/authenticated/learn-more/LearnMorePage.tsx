@@ -21,7 +21,7 @@ export default function LearnMorePage(props: Props) {
       </Typography>
       <Typography>
         For the sake of the demo, all the API calls are mocked. In order to be as realistic as possible they are delayed
-        and subject to failures. Any data that needs to be persisted such as authentification tokens or todos are stored
+        and subject to failures. Any data that needs to be persisted such as Authentication tokens or todos are stored
         within the local storage of the browser in use.
       </Typography>
       <Typography variant="h4" component="h2">

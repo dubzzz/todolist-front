@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AuthentificatedHeader from './AuthentificatedHeader';
+import AuthenticatedHeader from './AuthenticatedHeader';
 import { TodoListProvider } from '../../context/TodoListContext';
-import AppMenu from './AuthentificatedMenu';
+import AppMenu from './AuthenticatedMenu';
 import { Switch, Route } from 'react-router-dom';
 
 const LearnMorePage = React.lazy(() => import('./learn-more/LearnMorePage'));
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {};
 
-export default function AuthentificatedApp(props: Props) {
+export default function AuthenticatedApp(props: Props) {
   const classes = useStyles();
   const [drawerOpened, setDrawerOpened] = useState(false);
 
@@ -33,7 +33,7 @@ export default function AuthentificatedApp(props: Props) {
     <div className={classes.root}>
       <TodoListProvider>
         <CssBaseline />
-        <AuthentificatedHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
+        <AuthenticatedHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <AppMenu drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
         <main className={classes.content}>
           <div className={classes.appBarSpacer}></div>

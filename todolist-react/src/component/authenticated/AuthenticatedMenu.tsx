@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = { drawerOpened: boolean; toggleDrawer: () => void } & RouteComponentProps;
 
-function AuthentificatedMenu(props: Props) {
+function AuthenticatedMenu(props: Props) {
   const classes = useStyles();
   const { width } = useWindowDimension();
 
@@ -117,4 +117,4 @@ function AuthentificatedMenu(props: Props) {
   );
 }
 
-export default withRouter(AuthentificatedMenu);
+export default withRouter(AuthenticatedMenu);

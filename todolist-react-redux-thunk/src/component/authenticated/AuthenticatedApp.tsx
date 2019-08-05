@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AuthentificatedHeader from './AuthentificatedHeader';
-import AppMenu from './AuthentificatedMenu';
+import AuthenticatedHeader from './AuthenticatedHeader';
+import AppMenu from './AuthenticatedMenu';
 import { Switch, Route } from 'react-router-dom';
 import { ReduxState } from '../../redux/reducers';
 import { requestTodolistUpdates, stopTodolistUpdates } from '../../redux/actions/todolist';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {};
 
-export default function AuthentificatedApp(props: Props) {
+export default function AuthenticatedApp(props: Props) {
   const classes = useStyles();
   const ref = useRef(Symbol());
   const [drawerOpened, setDrawerOpened] = useState(false);
@@ -44,7 +44,7 @@ export default function AuthentificatedApp(props: Props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AuthentificatedHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
+      <AuthenticatedHeader drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
       <AppMenu drawerOpened={drawerOpened} toggleDrawer={() => setDrawerOpened(s => !s)} />
       <main className={classes.content}>
         <div className={classes.appBarSpacer}></div>

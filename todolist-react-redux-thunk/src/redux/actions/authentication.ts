@@ -38,8 +38,8 @@ export type Actions = ActionLoginSuccess | ActionLoginFailure | ActionLoginOnGoi
 // thunks
 
 const persistTokens = (username: string, token: string) => {
-  Api.writeStorage('AuthentificationProvider', 'username', username);
-  Api.writeStorage('AuthentificationProvider', 'token', token);
+  Api.writeStorage('AuthenticationProvider', 'username', username);
+  Api.writeStorage('AuthenticationProvider', 'token', token);
 };
 
 export const tryLoginByCredsAction = (username: string, password: string) => {
@@ -59,8 +59,8 @@ export const tryLoginByCredsAction = (username: string, password: string) => {
 
 export const tryLoginByTokenAction = () => {
   return async (dispatch: Dispatch) => {
-    const username = Api.readStorage('AuthentificationProvider', 'username');
-    const token = Api.readStorage('AuthentificationProvider', 'token');
+    const username = Api.readStorage('AuthenticationProvider', 'username');
+    const token = Api.readStorage('AuthenticationProvider', 'token');
     if (token === '') return;
 
     dispatch(loginOnGoingAction());
@@ -76,8 +76,8 @@ export const tryLoginByTokenAction = () => {
 
 export const tryLogoutAction = (silent?: boolean) => {
   return async (dispatch: Dispatch) => {
-    Api.clearStorage('AuthentificationProvider', 'username');
-    Api.clearStorage('AuthentificationProvider', 'token');
+    Api.clearStorage('AuthenticationProvider', 'username');
+    Api.clearStorage('AuthenticationProvider', 'token');
     dispatch(loginFailureAction());
     if (!silent) dispatch(notifyAction('Logout successful', NotificationLevel.Success));
   };

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
 import { useNotification } from './NotificationContext';
-import { useAuthentification } from './AuthentificationContext';
+import { useAuthentication } from './AuthenticationContext';
 
 export enum TodoState {
   Noop = 'noop',
@@ -26,7 +26,7 @@ const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
   const { error } = useNotification();
-  const { token, logout } = useAuthentification();
+  const { token, logout } = useAuthentication();
   const [ready, setReady] = useState(false);
   const [todos, setTodos] = useState([] as TodoType[]);
 

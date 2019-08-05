@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 type Props = { drawerOpened: boolean; toggleDrawer: () => void };
 
-export default function AuthentificatedHeader(props: Props) {
+export default function AuthenticatedHeader(props: Props) {
   const classes = useStyles();
   const username = useSelector((state: ReduxState) => state.authentication.username);
   const ready = useSelector((state: ReduxState) => state.todolist.ready);
