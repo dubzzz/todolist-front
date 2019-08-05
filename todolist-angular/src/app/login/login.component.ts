@@ -11,6 +11,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   redirect?: string;
 
+  username: string = "";
+  password: string = "";
+  hide: boolean = true;
+
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -19,6 +23,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         params => (this.redirect = params["redirect"])
       )
     );
+  }
+
+  canLogin() {
+    return this.username.length > 0 && this.password.length > 0;
+  }
+
+  login() {
+    if (!this.canLogin()) return;
   }
 
   ngOnDestroy() {

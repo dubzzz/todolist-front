@@ -1,1 +1,49 @@
-<p>login works! will redirect to {{ redirect }}</p>
+<div id="content">
+  <mat-card>
+    <img
+      mat-card-image
+      src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Eiffel_Tower_and_the_Trocadero%2C_Exposition_Universal%2C_1900%2C_Paris%2C_France.jpg"
+      alt="Eiffel Tower"
+    />
+    <mat-card-header>
+      <mat-card-title>Welcome to TodoList Angular</mat-card-title>
+      <mat-card-subtitle>Try with password: “password”</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <input
+          #usernameBox
+          matInput
+          placeholder="Username"
+          [value]="username"
+          (input)="username = usernameBox.value"
+          (keyup.enter)="login()"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          #passwordBox
+          matInput
+          placeholder="Password"
+          [type]="hide ? 'password' : 'text'"
+          [value]="password"
+          (input)="password = passwordBox.value"
+          (keyup.enter)="login()"
+        /><button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button></mat-form-field
+      >
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [disabled]="!canLogin()">
+        Login
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
