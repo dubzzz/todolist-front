@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AuthentificatedHeader from './AuthentificatedHeader';
 import AppMenu from './AuthentificatedMenu';
 import { Switch, Route } from 'react-router-dom';
-import * as Api from '../../api';
-import { NotificationLevel } from '../../redux/reducers/notification';
-import { notifyAction } from '../../redux/actions/notification';
-import { tryLogoutAction } from '../../redux/actions/authentication';
 import { ReduxState } from '../../redux/reducers';
-import { refreshTodosAction } from '../../redux/actions/todolist';
+import { requestTodolistUpdates, stopTodolistUpdates } from '../../redux/actions/todolist';
 
 const LearnMorePage = React.lazy(() => import('./learn-more/LearnMorePage'));
 const ListPage = React.lazy(() => import('./list/ListPage'));
@@ -33,20 +29,16 @@ type Props = {};
 
 export default function AuthentificatedApp(props: Props) {
   const classes = useStyles();
+  const ref = useRef(Symbol());
   const [drawerOpened, setDrawerOpened] = useState(false);
   const token = useSelector((state: ReduxState) => state.authentication.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const handle = Api.addTodoListener(
-      token,
-      todos => dispatch(refreshTodosAction(todos)),
-      () => {
-        dispatch(notifyAction('Revoked token, connection lost', NotificationLevel.Error));
-        dispatch(tryLogoutAction(true));
-      }
-    );
-    return () => Api.removeTodoListener(handle);
+    dispatch(requestTodolistUpdates(token, ref));
+    return () => {
+      dispatch(stopTodolistUpdates(ref));
+    };
   }, [token, dispatch]);
 
   return (

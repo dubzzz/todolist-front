@@ -1,4 +1,10 @@
-import { TODOLIST_ADD_OR_EDIT_TODO, TODOLIST_REMOVE_TODO, TODOLIST_REFRESH_TODOS } from '../actions/todolist';
+import {
+  TODOLIST_ADD_OR_EDIT_TODO,
+  TODOLIST_REMOVE_TODO,
+  TODOLIST_REFRESH_TODOS,
+  TODOLIST_ADD_REQUESTER,
+  TODOLIST_REMOVE_REQUESTER
+} from '../actions/todolist';
 import * as Api from '../../api';
 import { Actions } from '../actions/todolist';
 
@@ -15,10 +21,14 @@ export type TodoType = {
 export type TodolistState = {
   ready: boolean;
   todos: TodoType[];
+  handle: Api.TodoListenerHandle | null;
+  requesters: unknown[];
 };
 const initialState: TodolistState = {
   ready: false,
-  todos: []
+  todos: [],
+  handle: null,
+  requesters: []
 };
 
 export default (state = initialState, action: Actions) => {
@@ -66,6 +76,17 @@ export default (state = initialState, action: Actions) => {
           })
           .concat(state.todos.filter(t => t.state === TodoState.Add)) // Add
       };
+    }
+    case TODOLIST_ADD_REQUESTER: {
+      const { handle, requester } = action.payload;
+      if (state.requesters.includes(requester)) {
+        return { ...state, handle };
+      }
+      return { ...state, handle, requesters: [...state.requesters, requester] };
+    }
+    case TODOLIST_REMOVE_REQUESTER: {
+      const { handle, requester } = action.payload;
+      return { ...state, handle, requesters: state.requesters.filter(r => r !== requester) };
     }
     default:
       return state;
