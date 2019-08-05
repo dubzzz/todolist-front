@@ -17,10 +17,10 @@ export const tryLoginByCredsAction = (username: string, password: string) =>
     type: AUTHENTICATION_TRY_LOGIN_BY_CREDS,
     payload: { username, password }
   } as const);
-export const tryLogoutAction = () =>
+export const tryLogoutAction = (silent?: boolean) =>
   ({
     type: AUTHENTICATION_LOGOUT,
-    payload: {}
+    payload: { silent }
   } as const);
 export const loginSuccessAction = (username: string, token: string) =>
   ({

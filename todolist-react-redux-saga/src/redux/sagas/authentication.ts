@@ -13,6 +13,8 @@ import {
   ActionLogout,
   AUTHENTICATION_LOGOUT
 } from '../actions/authentication';
+import { NotificationLevel } from '../reducers/notification';
+import { notifyAction } from '../actions/notification';
 
 function persistTokens(username: string, token: string) {
   Api.writeStorage('AuthentificationProvider', 'username', username);
@@ -26,8 +28,10 @@ function* tryLoginByCreds(action: ActionTryLoginByCreds) {
     const tokens: Api.LoginSuccess = yield call(() => Api.login(username, password));
     persistTokens(tokens.username, tokens.token);
     yield put(loginSuccessAction(tokens.username, tokens.token));
+    yield put(notifyAction('Login successful', NotificationLevel.Success));
   } catch (err) {
     yield put(loginFailureAction());
+    yield put(notifyAction('Login failure', NotificationLevel.Error));
   }
 }
 
@@ -42,13 +46,16 @@ function* tryLoginByToken(action: ActionTryLoginByToken) {
   if (success) {
     persistTokens(username, token);
     yield put(loginSuccessAction(username, token));
+    yield put(notifyAction('Login successful', NotificationLevel.Success));
   } else yield put(loginFailureAction());
 }
 
 function* logout(action: ActionLogout) {
+  const { silent } = action.payload;
   Api.clearStorage('AuthentificationProvider', 'username');
   Api.clearStorage('AuthentificationProvider', 'token');
   yield put(loginFailureAction());
+  if (!silent) put(notifyAction('Logout successful', NotificationLevel.Success));
 }
 
 export default function* rootAuthenticationSaga(): SagaIterator {

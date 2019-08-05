@@ -60,7 +60,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     };
     const handle = Api.addTodoListener(token, listener, () => {
       dispatch(notifyAction('Revoked token, connection lost', NotificationLevel.Error));
-      dispatch(tryLogoutAction());
+      dispatch(tryLogoutAction(true));
     });
     return () => Api.removeTodoListener(handle);
   }, [token, dispatch]);
