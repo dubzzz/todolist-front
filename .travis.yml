@@ -6,7 +6,7 @@ script:
   - cd todolist-react-redux-saga && yarn && yarn build && cd ..
   - mkdir build
   - mv todolist-react/build build/todolist-react
-  - mv todolist-react/build build/todolist-react-redux-saga
+  - mv todolist-react-redux-saga/build build/todolist-react-redux-saga
 
 deploy:
   provider: pages
