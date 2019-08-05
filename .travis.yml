@@ -5,10 +5,12 @@ script:
   - cd todolist-react && yarn && yarn build && cd ..
   - cd todolist-react-redux-saga && yarn && yarn build && cd ..
   - cd todolist-react-redux-thunk && yarn && yarn build && cd ..
+  - cd todolist-angular && npm && npm run build && cd ..
   - mkdir build
   - mv todolist-react/build build/todolist-react
   - mv todolist-react-redux-saga/build build/todolist-react-redux-saga
   - mv todolist-react-redux-thunk/build build/todolist-react-redux-thunk
+  - mv todolist-angular/dist/todolist-angular build/todolist-angular
 
 deploy:
   provider: pages
