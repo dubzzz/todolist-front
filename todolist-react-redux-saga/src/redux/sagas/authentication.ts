@@ -55,7 +55,7 @@ function* logout(action: ActionLogout) {
   Api.clearStorage('AuthentificationProvider', 'username');
   Api.clearStorage('AuthentificationProvider', 'token');
   yield put(loginFailureAction());
-  if (!silent) put(notifyAction('Logout successful', NotificationLevel.Success));
+  if (!silent) yield put(notifyAction('Logout successful', NotificationLevel.Success));
 }
 
 export default function* rootAuthenticationSaga(): SagaIterator {
