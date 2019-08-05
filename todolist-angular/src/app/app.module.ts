@@ -1,5 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { APP_BASE_HREF } from "@angular/common";
+import { environment } from "./environments/environment";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -16,7 +18,14 @@ import { AuthenticatedModule } from "./authenticated/authenticated.module";
     LoginModule,
     AuthenticatedModule
   ],
-  providers: [],
+  providers: environment.production
+    ? [
+        {
+          provide: APP_BASE_HREF,
+          useValue: "https://dubzzz.github.io/todolist-front/todolist-angular/"
+        }
+      ]
+    : [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
