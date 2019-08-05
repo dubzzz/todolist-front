@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Api from '../api';
-import { useNotification } from './NotificationContext';
 import { ReduxState } from '../redux/reducers';
 import { tryLogoutAction } from '../redux/actions/authentication';
+import { notifyAction } from '../redux/actions/notification';
+import { NotificationLevel } from '../redux/reducers/notification';
 
 export enum TodoState {
   Noop = 'noop',
@@ -27,7 +28,6 @@ const defaultTodoList = {} as TodoListContextType;
 const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
-  const { error } = useNotification();
   const token = useSelector((state: ReduxState) => state.authentication.token);
   const dispatch = useDispatch();
   const [ready, setReady] = useState(false);
@@ -59,11 +59,11 @@ export function TodoListProvider<TProps>(props: TProps) {
       });
     };
     const handle = Api.addTodoListener(token, listener, () => {
-      error('Revoked token, connection lost');
+      dispatch(notifyAction('Revoked token, connection lost', NotificationLevel.Error));
       dispatch(tryLogoutAction());
     });
     return () => Api.removeTodoListener(handle);
-  }, [token, dispatch, error]);
+  }, [token, dispatch]);
 
   const addTodo = (task: string) => {
     const guid = Math.random()
@@ -74,7 +74,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     setTodos(ts => [...ts, { state: TodoState.Add, data: todo }]);
     Api.addTodo(token, todo).then(r => {
       if (!r) {
-        error(`Failed to add todo: ${todo.task}`);
+        dispatch(notifyAction(`Failed to add todo: ${todo.task}`, NotificationLevel.Error));
         setTodos(ts => ts.filter(t => t.data.guid !== guid));
       } else {
         // We apply the modification
@@ -86,7 +86,7 @@ export function TodoListProvider<TProps>(props: TProps) {
   const toggleTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) {
-      error(`No todo available for modification given guid ${guid}`);
+      dispatch(notifyAction(`No todo available for modification given guid ${guid}`, NotificationLevel.Error));
       return;
     }
 
@@ -95,7 +95,7 @@ export function TodoListProvider<TProps>(props: TProps) {
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Edit, data: todo } : t)));
     Api.editTodo(token, todo).then(r => {
       if (!r) {
-        error(`Failed to edit todo: ${prevTodo.data.task}`);
+        dispatch(notifyAction(`Failed to edit todo: ${prevTodo.data.task}`, NotificationLevel.Error));
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification
@@ -107,14 +107,14 @@ export function TodoListProvider<TProps>(props: TProps) {
   const removeTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) {
-      error(`No todo available for modification given guid ${guid}`);
+      dispatch(notifyAction(`No todo available for modification given guid ${guid}`, NotificationLevel.Error));
       return;
     }
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Remove, data: prevTodo.data } : t)));
     Api.removeTodo(token, prevTodo.data).then(r => {
       if (!r) {
-        error(`Failed to remove todo: ${prevTodo.data.task}`);
+        dispatch(notifyAction(`Failed to remove todo: ${prevTodo.data.task}`, NotificationLevel.Error));
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification
