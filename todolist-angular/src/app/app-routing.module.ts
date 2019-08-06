@@ -9,7 +9,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: "**",
+    path: "",
     loadChildren: () =>
       import("./authenticated/authenticated.module").then(
         mod => mod.AuthenticatedModule
