@@ -1,4 +1,4 @@
-<div *ngIf="token$ | async as token; else waitingForToken">
+<div>
   <div class="add-todo-area">
     <mat-form-field class="add-todo-field">
       <input
@@ -8,10 +8,10 @@
         value=""
         [value]="taskName"
         (input)="taskName = taskNameBox.value"
-        (keyup.enter)="addTodo(token)"
+        (keyup.enter)="addTodo()"
       />
     </mat-form-field>
-    <button mat-button (click)="addTodo(token)" [disabled]="taskName === ''">
+    <button mat-button (click)="addTodo()" [disabled]="taskName === ''">
       Add
     </button>
   </div>
@@ -21,5 +21,4 @@
     </div>
   </div>
 </div>
-<ng-template #waitingForToken>Waiting for token...</ng-template>
 <ng-template #waitingForTodos>Waiting for todos...</ng-template>

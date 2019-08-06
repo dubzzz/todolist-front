@@ -6,9 +6,9 @@ import {
   OnInit,
   OnDestroy
 } from "@angular/core";
-import { AuthService, AuthStatus } from "../auth/auth.service";
-import { Observable, Subscription } from "rxjs";
-import { map, filter, take } from "rxjs/operators";
+import { AuthService } from "../auth/auth.service";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { TodolistService } from "./todolist/todolist.service";
 
 @Component({
@@ -17,8 +17,6 @@ import { TodolistService } from "./todolist/todolist.service";
   styleUrls: ["./authenticated-header.component.css"]
 })
 export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
-  private subscription = new Subscription();
-
   @Input() expandedMenu: boolean;
   @Output() toggleMenu = new EventEmitter<void>();
 
@@ -33,21 +31,11 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.username$ = this.authService.state$.pipe(map(s => s.username));
     this.numTodos$ = this.todolistService.state$.pipe(map(s => s.todos.length));
-
-    this.subscription.add(
-      this.authService.state$
-        .pipe(
-          filter(s => s.status === AuthStatus.Authenticated),
-          map(s => s.token),
-          take(1)
-        )
-        .subscribe(token => this.todolistService.addRequester(token, this))
-    );
+    this.todolistService.addRequester(this);
   }
 
   ngOnDestroy() {
     this.todolistService.removeRequester(this);
-    this.subscription.unsubscribe();
   }
 
   logout() {

@@ -19,6 +19,7 @@ export type TodolistState = {
   providedIn: "root"
 })
 export class TodolistService {
+  private token = "";
   private todos: TodolistState["todos"];
   private subject: Subject<TodolistState>;
   readonly state$: Observable<TodolistState>;
@@ -30,6 +31,13 @@ export class TodolistService {
     this.todos = [];
     this.subject = new BehaviorSubject({ ready: false, todos: this.todos });
     this.state$ = this.subject.asObservable();
+    this.authService.state$.subscribe(s => {
+      this.token = s.token;
+      if (this.requesters.size !== 0) {
+        this.unregisterTodoListener();
+        this.registerTodoListener();
+      }
+    });
   }
 
   private updateTodos(todos: TodolistState["todos"]) {
@@ -37,7 +45,7 @@ export class TodolistService {
     this.subject.next({ ready: true, todos });
   }
 
-  async addTodo(token: string, task: string) {
+  async addTodo(task: string) {
     const todo: Api.Todo = {
       guid: Math.random()
         .toString(16)
@@ -46,7 +54,7 @@ export class TodolistService {
       done: false
     };
     this.updateTodos([...this.todos, { state: TodoSyncState.Add, data: todo }]);
-    const r = await Api.addTodo(token, todo);
+    const r = await Api.addTodo(this.token, todo);
     if (r) {
       this.updateTodos(
         this.todos.map(t =>
@@ -60,53 +68,62 @@ export class TodolistService {
     }
   }
 
-  addRequester(token: string, requester: OnInit & OnDestroy) {
+  private registerTodoListener() {
+    this.todoListenerHandle = Api.addTodoListener(
+      this.token,
+      todos => {
+        const todosBeingAdded: {
+          [guid: string]: Api.Todo;
+        } = this.todos
+          .filter(t => t.state === TodoSyncState.Add)
+          .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+        const todosBeingEdited: {
+          [guid: string]: Api.Todo;
+        } = this.todos
+          .filter(t => t.state === TodoSyncState.Edit)
+          .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+        const todosBeingRemoved: {
+          [guid: string]: Api.Todo;
+        } = this.todos
+          .filter(t => t.state === TodoSyncState.Remove)
+          .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+
+        const updatedTodos = todos
+          .filter(t => todosBeingAdded[t.guid] === undefined)
+          .map(t => {
+            // Remove, Edit and Noop
+            if (todosBeingEdited[t.guid]) {
+              return {
+                state: TodoSyncState.Edit,
+                data: todosBeingEdited[t.guid]
+              };
+            }
+            if (todosBeingRemoved[t.guid]) {
+              return {
+                state: TodoSyncState.Remove,
+                data: todosBeingRemoved[t.guid]
+              };
+            }
+            return { state: TodoSyncState.Noop, data: t };
+          })
+          .concat(this.todos.filter(t => t.state === TodoSyncState.Add)); // Add
+
+        this.updateTodos(updatedTodos);
+      },
+      () => {
+        this.authService.logout();
+      }
+    );
+  }
+
+  private unregisterTodoListener() {
+    Api.removeTodoListener(this.todoListenerHandle);
+    this.subject.next({ ready: false, todos: this.todos });
+  }
+
+  addRequester(requester: OnInit & OnDestroy) {
     if (this.requesters.size === 0) {
-      this.todoListenerHandle = Api.addTodoListener(
-        token,
-        todos => {
-          const todosBeingAdded: {
-            [guid: string]: Api.Todo;
-          } = this.todos
-            .filter(t => t.state === TodoSyncState.Add)
-            .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
-          const todosBeingEdited: {
-            [guid: string]: Api.Todo;
-          } = this.todos
-            .filter(t => t.state === TodoSyncState.Edit)
-            .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
-          const todosBeingRemoved: {
-            [guid: string]: Api.Todo;
-          } = this.todos
-            .filter(t => t.state === TodoSyncState.Remove)
-            .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
-
-          const updatedTodos = todos
-            .filter(t => todosBeingAdded[t.guid] === undefined)
-            .map(t => {
-              // Remove, Edit and Noop
-              if (todosBeingEdited[t.guid]) {
-                return {
-                  state: TodoSyncState.Edit,
-                  data: todosBeingEdited[t.guid]
-                };
-              }
-              if (todosBeingRemoved[t.guid]) {
-                return {
-                  state: TodoSyncState.Remove,
-                  data: todosBeingRemoved[t.guid]
-                };
-              }
-              return { state: TodoSyncState.Noop, data: t };
-            })
-            .concat(this.todos.filter(t => t.state === TodoSyncState.Add)); // Add
-
-          this.updateTodos(updatedTodos);
-        },
-        () => {
-          this.authService.logout();
-        }
-      );
+      this.registerTodoListener();
     }
     this.requesters.add(requester);
   }
@@ -117,8 +134,7 @@ export class TodolistService {
     }
     this.requesters.delete(requester);
     if (this.requesters.size === 0) {
-      Api.removeTodoListener(this.todoListenerHandle);
-      this.subject.next({ ready: false, todos: this.todos });
+      this.unregisterTodoListener();
     }
   }
 }
