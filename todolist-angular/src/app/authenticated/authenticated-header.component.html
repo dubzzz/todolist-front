@@ -5,7 +5,9 @@
   <span>Welcome {{ username$ | async }}</span>
   <span class="spacer"></span>
   <button mat-icon-button aria-label="To-dos">
-    <mat-icon matBadge="15" matBadgeColor="warn">shopping_cart</mat-icon>
+    <mat-icon [matBadge]="numTodos$ | async" matBadgeColor="warn"
+      >shopping_cart</mat-icon
+    >
   </button>
   <button mat-icon-button aria-label="Logout" (click)="logout()">
     <mat-icon>power_settings_new</mat-icon>
