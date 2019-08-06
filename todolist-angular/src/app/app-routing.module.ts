@@ -14,7 +14,8 @@ const routes: Routes = [
       import("./authenticated/authenticated.module").then(
         mod => mod.AuthenticatedModule
       ),
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService],
+    data: { preload: true }
   }
 ];
 
