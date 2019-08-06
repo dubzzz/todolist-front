@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import {
   CanActivate,
-  Router,
   RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  ActivatedRouteSnapshot,
+  CanActivateChild
 } from "@angular/router";
 import { AuthService } from "./auth.service";
 import { map } from "rxjs/operators";
@@ -11,8 +11,9 @@ import { map } from "rxjs/operators";
 @Injectable({
   providedIn: "root"
 })
-export class AuthGuardService implements CanActivate {
+export class AuthGuardService implements CanActivate, CanActivateChild {
   constructor(readonly auth: AuthService) {}
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.auth.isAuthenticated$.pipe(
       map(isAuth => {
@@ -23,5 +24,9 @@ export class AuthGuardService implements CanActivate {
         return true;
       })
     );
+  }
+
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.canActivate(route, state);
   }
 }

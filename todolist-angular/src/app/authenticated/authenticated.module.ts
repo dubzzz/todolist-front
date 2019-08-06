@@ -8,6 +8,10 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { AuthenticatedHeaderComponent } from "./authenticated-header.component";
 import { AuthenticatedMenuComponent } from "./authenticated-menu.component";
+import { LearnMoreModule } from "./learn-more/learn-more.module";
+import { NotFoundModule } from "./not-found/not-found.module";
+import { TodolistModule } from "./todolist/todolist.module";
+import { AuthenticatedRoutingModule } from "./authenticated-routing.module";
 @NgModule({
   declarations: [
     AuthenticatedComponent,
@@ -16,11 +20,15 @@ import { AuthenticatedMenuComponent } from "./authenticated-menu.component";
   ],
   imports: [
     CommonModule,
+    AuthenticatedRoutingModule,
     MatBadgeModule,
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
+    LearnMoreModule,
+    NotFoundModule,
+    TodolistModule
   ]
 })
 export class AuthenticatedModule {}

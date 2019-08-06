@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuardService } from "./auth/auth-guard.service";
 import { LoginComponent } from "./login/login.component";
-import { AuthenticatedComponent } from "./authenticated/authenticated.component";
 
 const routes: Routes = [
   {
@@ -11,13 +10,18 @@ const routes: Routes = [
   },
   {
     path: "**",
-    component: AuthenticatedComponent,
+    loadChildren: () =>
+      import("./authenticated/authenticated.module").then(
+        mod => mod.AuthenticatedModule
+      ),
     canActivate: [AuthGuardService]
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [
+    RouterModule.forRoot(routes, { useHash: true, enableTracing: true })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
