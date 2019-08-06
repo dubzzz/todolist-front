@@ -12,16 +12,12 @@ import { map } from "rxjs/operators";
   providedIn: "root"
 })
 export class AuthGuardService implements CanActivate {
-  constructor(public auth: AuthService, public router: Router) {}
+  constructor(readonly auth: AuthService) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.auth.isAuthenticated$.pipe(
       map(isAuth => {
         if (!isAuth) {
-          this.router.navigate(["/login"], {
-            queryParams: {
-              redirect: state.url
-            }
-          });
+          this.auth.redirectToLogin(state);
           return false;
         }
         return true;

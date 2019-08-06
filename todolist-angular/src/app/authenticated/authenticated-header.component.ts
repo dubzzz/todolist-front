@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { AuthService } from "../auth/auth.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-authenticated-header",

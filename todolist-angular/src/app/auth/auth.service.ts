@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import * as Api from "../../api";
+import { Router, RouterStateSnapshot } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +12,7 @@ export class AuthService {
   readonly state$: Observable<AuthState>;
   readonly isAuthenticated$: Observable<boolean>;
 
-  constructor() {
+  constructor(readonly router: Router) {
     const username = Api.readStorage("AuthenticationProvider", "username");
     const token = Api.readStorage("AuthenticationProvider", "token");
 
@@ -81,6 +82,15 @@ export class AuthService {
     });
     Api.clearStorage("AuthenticationProvider", "username");
     Api.clearStorage("AuthenticationProvider", "token");
+    this.redirectToLogin(this.router.routerState.snapshot);
+  }
+
+  redirectToLogin(state: RouterStateSnapshot) {
+    this.router.navigate(["/login"], {
+      queryParams: {
+        redirect: state.url
+      }
+    });
   }
 }
 
