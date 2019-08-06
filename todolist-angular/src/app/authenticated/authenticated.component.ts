@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-authenticated',
-  templateUrl: './authenticated.component.html',
-  styleUrls: ['./authenticated.component.css']
+  selector: "app-authenticated",
+  templateUrl: "./authenticated.component.html",
+  styleUrls: ["./authenticated.component.css"]
 })
-export class AuthenticatedComponent implements OnInit {
+export class AuthenticatedComponent {
+  expandedMenu = false;
 
-  constructor() { }
-
-  ngOnInit() {
+  toggleMenu() {
+    this.expandedMenu = !this.expandedMenu;
   }
-
 }

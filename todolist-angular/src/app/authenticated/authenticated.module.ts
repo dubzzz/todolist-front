@@ -6,7 +6,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthenticatedHeaderComponent } from "./authenticated-header.component";
 import { AuthenticatedMenuComponent } from "./authenticated-menu.component";
 @NgModule({
@@ -21,8 +20,7 @@ import { AuthenticatedMenuComponent } from "./authenticated-menu.component";
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatToolbarModule,
-    MatTooltipModule
+    MatToolbarModule
   ]
 })
 export class AuthenticatedModule {}
