@@ -1,0 +1,6 @@
+.add-todo-area {
+  display: flex;
+}
+.add-todo-field {
+  flex-grow: 1;
+}

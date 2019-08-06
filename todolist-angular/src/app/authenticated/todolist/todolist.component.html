@@ -1,1 +1,25 @@
-<p>todolist works!</p>
+<div *ngIf="token$ | async as token; else waitingForToken">
+  <div class="add-todo-area">
+    <mat-form-field class="add-todo-field">
+      <input
+        #taskNameBox
+        matInput
+        placeholder="Add a new todo"
+        value=""
+        [value]="taskName"
+        (input)="taskName = taskNameBox.value"
+        (keyup.enter)="addTodo(token)"
+      />
+    </mat-form-field>
+    <button mat-button (click)="addTodo(token)" [disabled]="taskName === ''">
+      Add
+    </button>
+  </div>
+  <div *ngIf="todoState$ | async as todoState; else waitingForTodos">
+    <div *ngFor="let todo of todoState.todos">
+      {{ todo | json }}
+    </div>
+  </div>
+</div>
+<ng-template #waitingForToken>Waiting for token...</ng-template>
+<ng-template #waitingForTodos>Waiting for todos...</ng-template>

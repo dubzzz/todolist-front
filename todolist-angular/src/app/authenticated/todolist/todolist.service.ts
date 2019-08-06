@@ -37,6 +37,29 @@ export class TodolistService {
     this.subject.next({ ready: true, todos });
   }
 
+  async addTodo(token: string, task: string) {
+    const todo: Api.Todo = {
+      guid: Math.random()
+        .toString(16)
+        .substr(2),
+      task,
+      done: false
+    };
+    this.updateTodos([...this.todos, { state: TodoSyncState.Add, data: todo }]);
+    const r = await Api.addTodo(token, todo);
+    if (r) {
+      this.updateTodos(
+        this.todos.map(t =>
+          t.data.guid === todo.guid
+            ? { state: TodoSyncState.Noop, data: todo }
+            : t
+        )
+      );
+    } else {
+      this.updateTodos(this.todos.filter(t => t.data.guid !== todo.guid));
+    }
+  }
+
   addRequester(token: string, requester: OnInit & OnDestroy) {
     if (this.requesters.size === 0) {
       this.todoListenerHandle = Api.addTodoListener(
