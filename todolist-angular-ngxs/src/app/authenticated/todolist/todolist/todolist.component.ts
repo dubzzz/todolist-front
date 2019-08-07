@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/auth/auth.service';
 import { TodolistService, TodolistState } from '../todolist.service';
 import { Observable } from 'rxjs';
 
@@ -11,10 +10,7 @@ import { Observable } from 'rxjs';
 export class TodolistComponent implements OnInit, OnDestroy {
   todoState$: Observable<TodolistState>;
 
-  constructor(
-    readonly authService: AuthService,
-    readonly todolistService: TodolistService
-  ) {}
+  constructor(readonly todolistService: TodolistService) {}
 
   ngOnInit() {
     this.todoState$ = this.todolistService.state$;

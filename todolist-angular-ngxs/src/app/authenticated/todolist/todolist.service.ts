@@ -1,8 +1,10 @@
 import { Injectable, Component, OnInit, OnDestroy } from '@angular/core';
 import * as Api from '../../../api';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store, Select } from '@ngxs/store';
+import { AuthenticationState } from 'src/state/authentication/authentication.state';
+import { TryLogout } from 'src/state/authentication/authentication.actions';
 
 export enum TodoSyncState {
   Noop = 'noop',
@@ -23,6 +25,9 @@ export interface TodolistState {
   providedIn: 'root'
 })
 export class TodolistService {
+  @Select(AuthenticationState.token)
+  token$: Observable<string>;
+
   private token = '';
   private todos: TodolistState['todos'];
   private subject: Subject<TodolistState>;
@@ -31,15 +36,12 @@ export class TodolistService {
   private todoListenerHandle: Api.TodoListenerHandle | null;
   private requesters = new Set<OnInit & OnDestroy>();
 
-  constructor(
-    readonly authService: AuthService,
-    readonly snackBar: MatSnackBar
-  ) {
+  constructor(readonly store: Store, readonly snackBar: MatSnackBar) {
     this.todos = [];
     this.subject = new BehaviorSubject({ ready: false, todos: this.todos });
     this.state$ = this.subject.asObservable();
-    this.authService.state$.subscribe(s => {
-      this.token = s.token;
+    this.token$.subscribe(token => {
+      this.token = token;
       if (this.requesters.size !== 0) {
         this.unregisterTodoListener();
         this.registerTodoListener();
@@ -217,7 +219,7 @@ export class TodolistService {
         this.snackBar.open('Revoked token, connection lost', '', {
           duration: 1000
         });
-        this.authService.logout(true);
+        this.store.dispatch(new TryLogout(true));
       }
     );
   }

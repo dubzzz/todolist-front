@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
-import { AuthService, AuthStatus } from '../../auth/auth.service';
-import { map } from 'rxjs/operators';
+import { AuthenticationStatus } from 'src/state/authentication/authentication.model';
+import { AuthenticationState } from 'src/state/authentication/authentication.state';
+import { Select, Store } from '@ngxs/store';
+import { TryLoginByCreds } from 'src/state/authentication/authentication.actions';
 
 @Component({
   selector: 'app-login',
@@ -10,30 +12,31 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  @Select(AuthenticationState.status)
+  authStatus$: Observable<AuthenticationStatus>;
+
   subscription: Subscription = new Subscription();
   redirect?: string;
 
-  authStatus$: Observable<AuthStatus>;
   username = '';
   password = '';
   hide = true;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService
+    readonly store: Store,
+    readonly router: Router,
+    readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.authStatus$ = this.authService.state$.pipe(map(s => s.status));
     this.subscription.add(
       this.route.queryParams.subscribe(
         params => (this.redirect = params.redirect)
       )
     );
     this.subscription.add(
-      this.authService.state$.subscribe(s => {
-        if (s.status !== AuthStatus.Authenticated) {
+      this.authStatus$.subscribe(s => {
+        if (s !== AuthenticationStatus.Authenticated) {
           return;
         }
         this.router.navigate([this.redirect || '/']);
@@ -41,23 +44,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  canLogin(authStatus: AuthStatus) {
+  canLogin(authStatus: AuthenticationStatus) {
     return (
-      authStatus === AuthStatus.NonAuthenticated &&
+      authStatus === AuthenticationStatus.NonAuthenticated &&
       this.username.length > 0 &&
       this.password.length > 0
     );
   }
 
-  onGoingLogin(authStatus: AuthStatus) {
-    return authStatus === AuthStatus.OnGoingAuthentication;
+  onGoingLogin(authStatus: AuthenticationStatus) {
+    return authStatus === AuthenticationStatus.OnGoingAuthentication;
   }
 
-  login(authStatus: AuthStatus) {
+  login(authStatus: AuthenticationStatus) {
     if (!this.canLogin(authStatus)) {
       return;
     }
-    this.authService.login(this.username, this.password);
+    this.store.dispatch(new TryLoginByCreds(this.username, this.password));
   }
 
   ngOnDestroy() {

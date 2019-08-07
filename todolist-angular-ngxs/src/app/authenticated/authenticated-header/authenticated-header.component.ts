@@ -6,10 +6,12 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TodolistService } from '../todolist/todolist.service';
+import { AuthenticationState } from 'src/state/authentication/authentication.state';
+import { Select, Store } from '@ngxs/store';
+import { TryLogout } from 'src/state/authentication/authentication.actions';
 
 @Component({
   selector: 'app-authenticated-header',
@@ -20,16 +22,17 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
   @Input() expandedMenu: boolean;
   @Output() toggleMenu = new EventEmitter<void>();
 
+  @Select(AuthenticationState.username)
   username$: Observable<string>;
+
   numTodos$: Observable<number>;
 
   constructor(
-    readonly authService: AuthService,
+    readonly store: Store,
     readonly todolistService: TodolistService
   ) {}
 
   ngOnInit() {
-    this.username$ = this.authService.state$.pipe(map(s => s.username));
     this.numTodos$ = this.todolistService.state$.pipe(map(s => s.todos.length));
     this.todolistService.addRequester(this);
   }
@@ -39,6 +42,6 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(TryLogout);
   }
 }
