@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { LearnMoreComponent } from "./learn-more.component";
+import { LearnMoreComponent } from "./learn-more/learn-more.component";
 
 @NgModule({
   declarations: [LearnMoreComponent],

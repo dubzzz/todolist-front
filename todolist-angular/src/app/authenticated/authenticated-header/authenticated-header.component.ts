@@ -6,10 +6,10 @@ import {
   OnInit,
   OnDestroy
 } from "@angular/core";
-import { AuthService } from "../auth/auth.service";
+import { AuthService } from "../../auth/auth.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TodolistService } from "./todolist/todolist.service";
+import { TodolistService } from "../todolist/todolist.service";
 
 @Component({
   selector: "app-authenticated-header",
