@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class AuthenticatedMenuComponent {
   @Output() toggleMenu = new EventEmitter<void>();
 
-  constructor(public router: Router) {}
+  constructor(readonly router: Router) {}
 
   goTo(pageLink: string) {
     this.toggleMenu.emit();
