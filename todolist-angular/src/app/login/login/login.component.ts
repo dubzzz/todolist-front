@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
-import { AuthService, AuthState, AuthStatus } from "../../auth/auth.service";
+import { AuthService, AuthStatus } from "../../auth/auth.service";
 import { map } from "rxjs/operators";
 
 @Component({
