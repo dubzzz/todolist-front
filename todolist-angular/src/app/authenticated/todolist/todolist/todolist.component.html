@@ -1,43 +1,12 @@
 <div *ngIf="todoState$ | async as todoState; else waitingForTodos">
-  <div class="add-todo-area">
-    <mat-form-field class="add-todo-field">
-      <input
-        #taskNameBox
-        matInput
-        placeholder="Add a new todo"
-        value=""
-        [value]="taskName"
-        (input)="taskName = taskNameBox.value"
-        (keyup.enter)="addTodo()"
-      />
-    </mat-form-field>
-    <mat-icon *ngIf="!todoState.ready">refresh</mat-icon>
-    <button mat-button (click)="addTodo()" [disabled]="taskName === ''">
-      Add
-    </button>
-  </div>
-  <div>
-    <mat-card *ngFor="let todo of todoState.todos">
-      <mat-checkbox
-        [checked]="todo.data.done"
-        [disabled]="todo.state !== 'noop'"
-        (click)="toggleTodo(todo.data.guid)"
-      ></mat-checkbox>
-      <span
-        class="todo-label"
-        [class.remove]="todo.state === 'remove'"
-        [class.noaction]="todo.state !== 'noop'"
-        >{{ todo.data.task }}</span
-      >
-      <mat-icon *ngIf="todo.state !== 'noop'">refresh</mat-icon>
-      <button
-        mat-icon-button
-        aria-label="Delete todo"
-        (click)="removeTodo(todo.data.guid)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-card>
-  </div>
+  <app-todolist-new-item
+    [ready]="todoState.ready"
+    (addTodo)="addTodo($event)"
+  ></app-todolist-new-item>
+  <app-todolist-list
+    [todos]="todoState.todos"
+    (toggleTodo)="toggleTodo($event)"
+    (removeTodo)="removeTodo($event)"
+  ></app-todolist-list>
 </div>
 <ng-template #waitingForTodos>Waiting for todos...</ng-template>

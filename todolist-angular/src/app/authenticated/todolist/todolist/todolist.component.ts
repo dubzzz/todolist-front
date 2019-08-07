@@ -10,7 +10,6 @@ import { Observable } from "rxjs";
 })
 export class TodolistComponent implements OnInit, OnDestroy {
   todoState$: Observable<TodolistState>;
-  taskName = "";
 
   constructor(
     readonly authService: AuthService,
@@ -26,9 +25,8 @@ export class TodolistComponent implements OnInit, OnDestroy {
     this.todolistService.removeRequester(this);
   }
 
-  addTodo() {
-    this.todolistService.addTodo(this.taskName);
-    this.taskName = "";
+  addTodo(taskName: string) {
+    this.todolistService.addTodo(taskName);
   }
 
   toggleTodo(guid: string) {
