@@ -4,3 +4,16 @@
 .add-todo-field {
   flex-grow: 1;
 }
+mat-card {
+  display: flex;
+}
+.todo-label {
+  flex-grow: 1;
+  margin-left: 14px;
+}
+.todo-label.noaction {
+  color: #777;
+}
+.todo-label.remove {
+  text-decoration: line-through;
+}

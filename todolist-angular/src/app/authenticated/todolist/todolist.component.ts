@@ -30,4 +30,12 @@ export class TodolistComponent implements OnInit, OnDestroy {
     this.todolistService.addTodo(this.taskName);
     this.taskName = "";
   }
+
+  toggleTodo(guid: string) {
+    this.todolistService.toggleTodo(guid);
+  }
+
+  removeTodo(guid: string) {
+    this.todolistService.removeTodo(guid);
+  }
 }

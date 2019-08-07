@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="todoState$ | async as todoState; else waitingForTodos">
   <div class="add-todo-area">
     <mat-form-field class="add-todo-field">
       <input
@@ -11,14 +11,33 @@
         (keyup.enter)="addTodo()"
       />
     </mat-form-field>
+    <mat-icon *ngIf="!todoState.ready">refresh</mat-icon>
     <button mat-button (click)="addTodo()" [disabled]="taskName === ''">
       Add
     </button>
   </div>
-  <div *ngIf="todoState$ | async as todoState; else waitingForTodos">
-    <div *ngFor="let todo of todoState.todos">
-      {{ todo | json }}
-    </div>
+  <div>
+    <mat-card *ngFor="let todo of todoState.todos">
+      <mat-checkbox
+        [checked]="todo.data.done"
+        [disabled]="todo.state !== 'noop'"
+        (click)="toggleTodo(todo.data.guid)"
+      ></mat-checkbox>
+      <span
+        class="todo-label"
+        [class.remove]="todo.state === 'remove'"
+        [class.noaction]="todo.state !== 'noop'"
+        >{{ todo.data.task }}</span
+      >
+      <mat-icon *ngIf="todo.state !== 'noop'">refresh</mat-icon>
+      <button
+        mat-icon-button
+        aria-label="Delete todo"
+        (click)="removeTodo(todo.data.guid)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card>
   </div>
 </div>
 <ng-template #waitingForTodos>Waiting for todos...</ng-template>

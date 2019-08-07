@@ -68,6 +68,79 @@ export class TodolistService {
     }
   }
 
+  async toggleTodo(guid: string) {
+    const todo = this.todos.find(
+      t => t.data.guid === guid && t.state === TodoSyncState.Noop
+    );
+    if (!todo) {
+      return;
+    }
+
+    const newData = { ...todo.data, done: !todo.data.done };
+    this.updateTodos([
+      ...this.todos.map(t =>
+        t.data.guid === guid
+          ? {
+              state: TodoSyncState.Edit,
+              data: newData
+            }
+          : t
+      )
+    ]);
+    const r = await Api.editTodo(this.token, todo.data);
+    if (r) {
+      this.updateTodos(
+        this.todos.map(t =>
+          t.data.guid === guid
+            ? {
+                state: TodoSyncState.Noop,
+                data: newData
+              }
+            : t
+        )
+      );
+    } else {
+      this.updateTodos(
+        this.todos.map(t =>
+          t.data.guid === guid
+            ? { state: TodoSyncState.Noop, data: todo.data }
+            : t
+        )
+      );
+    }
+  }
+
+  async removeTodo(guid: string) {
+    const todo = this.todos.find(
+      t => t.data.guid === guid && t.state === TodoSyncState.Noop
+    );
+    if (!todo) {
+      return;
+    }
+    this.updateTodos([
+      ...this.todos.map(t =>
+        t.data.guid === guid
+          ? {
+              state: TodoSyncState.Remove,
+              data: todo.data
+            }
+          : t
+      )
+    ]);
+    const r = await Api.removeTodo(this.token, todo.data);
+    if (r) {
+      this.updateTodos(this.todos.filter(t => t.data.guid !== guid));
+    } else {
+      this.updateTodos(
+        this.todos.map(t =>
+          t.data.guid === guid
+            ? { state: TodoSyncState.Noop, data: todo.data }
+            : t
+        )
+      );
+    }
+  }
+
   private registerTodoListener() {
     this.todoListenerHandle = Api.addTodoListener(
       this.token,
