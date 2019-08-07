@@ -4,7 +4,9 @@
 ></app-authenticated-header>
 <mat-sidenav-container>
   <mat-sidenav mode="side" [opened]="expandedMenu"
-    ><app-authenticated-menu></app-authenticated-menu
+    ><app-authenticated-menu
+      (toggleMenu)="toggleMenu()"
+    ></app-authenticated-menu
   ></mat-sidenav>
   <mat-sidenav-content><router-outlet></router-outlet></mat-sidenav-content>
 </mat-sidenav-container>

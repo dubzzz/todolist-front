@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
@@ -7,9 +7,12 @@ import { Router } from "@angular/router";
   styleUrls: ["./authenticated-menu.component.css"]
 })
 export class AuthenticatedMenuComponent {
+  @Output() toggleMenu = new EventEmitter<void>();
+
   constructor(public router: Router) {}
 
   goTo(pageLink: string) {
+    this.toggleMenu.emit();
     this.router.navigate([pageLink]);
   }
 }
