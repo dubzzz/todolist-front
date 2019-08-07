@@ -11,8 +11,11 @@ export enum TodoSyncState {
 }
 
 export type TodolistState = {
-  ready: boolean;
-  todos: { data: Api.Todo; state: TodoSyncState }[];
+  readonly ready: boolean;
+  readonly todos: ReadonlyArray<{
+    readonly data: Api.Todo;
+    readonly state: TodoSyncState;
+  }>;
 };
 
 @Injectable({
