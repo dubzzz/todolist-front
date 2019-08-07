@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { TodoSyncState } from '../todolist.service';
+import { TodoSyncState } from 'src/state/todolist/todolist.model';
 import * as Api from '../../../../api';
 
 @Component({

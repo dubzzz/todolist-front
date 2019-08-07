@@ -1,6 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TodolistService, TodolistState } from '../todolist.service';
+import { TodolistService } from '../todolist.service';
 import { Observable } from 'rxjs';
+import { TodolistState } from 'src/state/todolist/todolist.state';
+import { Select, Store } from '@ngxs/store';
+import {
+  TryAddTodo,
+  TryRemoveTodo,
+  TryToggleTodo
+} from 'src/state/todolist/todolist.actions';
+import { AuthenticationState } from 'src/state/authentication/authentication.state';
 
 @Component({
   selector: 'app-todolist',
@@ -8,12 +16,18 @@ import { Observable } from 'rxjs';
   styleUrls: ['./todolist.component.css']
 })
 export class TodolistComponent implements OnInit, OnDestroy {
+  @Select(AuthenticationState.token)
+  token$: Observable<string>;
+
+  @Select(TodolistState)
   todoState$: Observable<TodolistState>;
 
-  constructor(readonly todolistService: TodolistService) {}
+  constructor(
+    readonly store: Store,
+    readonly todolistService: TodolistService
+  ) {}
 
   ngOnInit() {
-    this.todoState$ = this.todolistService.state$;
     this.todolistService.addRequester(this);
   }
 
@@ -22,14 +36,29 @@ export class TodolistComponent implements OnInit, OnDestroy {
   }
 
   addTodo(taskName: string) {
-    this.todolistService.addTodo(taskName);
+    this.store.dispatch(
+      new TryAddTodo(
+        this.store.selectSnapshot(AuthenticationState.token),
+        taskName
+      )
+    );
   }
 
   toggleTodo(guid: string) {
-    this.todolistService.toggleTodo(guid);
+    this.store.dispatch(
+      new TryToggleTodo(
+        this.store.selectSnapshot(AuthenticationState.token),
+        guid
+      )
+    );
   }
 
   removeTodo(guid: string) {
-    this.todolistService.removeTodo(guid);
+    this.store.dispatch(
+      new TryRemoveTodo(
+        this.store.selectSnapshot(AuthenticationState.token),
+        guid
+      )
+    );
   }
 }

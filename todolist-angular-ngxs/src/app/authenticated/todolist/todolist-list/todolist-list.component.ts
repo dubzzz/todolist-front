@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TodolistState } from '../todolist.service';
+import { TodolistStateModel } from 'src/state/todolist/todolist.model';
 
 @Component({
   selector: 'app-todolist-list',
@@ -8,7 +8,7 @@ import { TodolistState } from '../todolist.service';
 })
 export class TodolistListComponent {
   @Input()
-  todos: TodolistState['todos'];
+  todos: TodolistStateModel['todos'];
 
   @Output()
   toggleTodo = new EventEmitter<string>();

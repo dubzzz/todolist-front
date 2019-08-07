@@ -9,11 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginModule } from './login/login.module';
 import { AuthenticatedModule } from './authenticated/authenticated.module';
 import { AuthenticationState } from 'src/state/authentication/authentication.state';
+import { TodolistState } from 'src/state/todolist/todolist.state';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    NgxsModule.forRoot([AuthenticationState]),
+    NgxsModule.forRoot([AuthenticationState, TodolistState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
