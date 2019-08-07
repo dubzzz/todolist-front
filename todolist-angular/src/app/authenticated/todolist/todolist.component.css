@@ -6,6 +6,7 @@
 }
 mat-card {
   display: flex;
+  align-items: center;
 }
 .todo-label {
   flex-grow: 1;
