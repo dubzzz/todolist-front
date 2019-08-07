@@ -1,0 +1,17 @@
+<div class="add-todo-area">
+  <mat-form-field class="add-todo-field">
+    <input
+      #taskNameBox
+      matInput
+      placeholder="Add a new todo"
+      value=""
+      [value]="taskName"
+      (input)="taskName = taskNameBox.value"
+      (keyup.enter)="add()"
+    />
+  </mat-form-field>
+  <mat-icon *ngIf="!ready">refresh</mat-icon>
+  <button mat-button (click)="add()" [disabled]="taskName === ''">
+    Add
+  </button>
+</div>

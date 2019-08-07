@@ -1,0 +1,8 @@
+#content {
+  text-align: center;
+  padding: 1em;
+}
+mat-card {
+  display: inline-block;
+  max-width: 320px;
+}

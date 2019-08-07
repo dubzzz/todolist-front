@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-checkbox
+    [checked]="content.done"
+    [disabled]="state !== 'noop'"
+    (click)="toggleTodo.emit()"
+  ></mat-checkbox>
+  <span
+    class="todo-label"
+    [class.remove]="state === 'remove'"
+    [class.noaction]="state !== 'noop'"
+    >{{ content.task }}</span
+  >
+  <mat-icon *ngIf="state !== 'noop'">refresh</mat-icon>
+  <button mat-icon-button aria-label="Delete todo" (click)="removeTodo.emit()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</mat-card>

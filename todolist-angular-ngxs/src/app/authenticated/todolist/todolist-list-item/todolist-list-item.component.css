@@ -1,0 +1,14 @@
+mat-card {
+  display: flex;
+  align-items: center;
+}
+.todo-label {
+  flex-grow: 1;
+  margin-left: 14px;
+}
+.todo-label.noaction {
+  color: #777;
+}
+.todo-label.remove {
+  text-decoration: line-through;
+}

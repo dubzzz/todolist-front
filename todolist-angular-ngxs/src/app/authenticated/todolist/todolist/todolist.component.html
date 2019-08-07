@@ -1,0 +1,12 @@
+<div *ngIf="todoState$ | async as todoState; else waitingForTodos">
+  <app-todolist-new-item
+    [ready]="todoState.ready"
+    (addTodo)="addTodo($event)"
+  ></app-todolist-new-item>
+  <app-todolist-list
+    [todos]="todoState.todos"
+    (toggleTodo)="toggleTodo($event)"
+    (removeTodo)="removeTodo($event)"
+  ></app-todolist-list>
+</div>
+<ng-template #waitingForTodos>Waiting for todos...</ng-template>

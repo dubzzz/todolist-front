@@ -1,0 +1,9 @@
+<div>
+  <app-todolist-list-item
+    *ngFor="let todo of todos"
+    [state]="todo.state"
+    [content]="todo.data"
+    (toggleTodo)="toggleTodo.emit(todo.data.guid)"
+    (removeTodo)="removeTodo.emit(todo.data.guid)"
+  ></app-todolist-list-item>
+</div>
