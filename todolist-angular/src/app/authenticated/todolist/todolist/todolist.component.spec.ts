@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TodolistComponent } from "./todolist.component";
+import { TodolistComponent } from './todolist.component';
 
-describe("TodolistComponent", () => {
+describe('TodolistComponent', () => {
   let component: TodolistComponent;
   let fixture: ComponentFixture<TodolistComponent>;
 
@@ -18,7 +18,7 @@ describe("TodolistComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

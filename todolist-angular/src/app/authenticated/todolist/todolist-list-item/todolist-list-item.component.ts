@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { TodoSyncState } from "../todolist.service";
-import * as Api from "../../../../api";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { TodoSyncState } from '../todolist.service';
+import * as Api from '../../../../api';
 
 @Component({
-  selector: "app-todolist-list-item",
-  templateUrl: "./todolist-list-item.component.html",
-  styleUrls: ["./todolist-list-item.component.css"]
+  selector: 'app-todolist-list-item',
+  templateUrl: './todolist-list-item.component.html',
+  styleUrls: ['./todolist-list-item.component.css']
 })
 export class TodolistListItemComponent {
   @Input()

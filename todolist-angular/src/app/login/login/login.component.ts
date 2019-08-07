@@ -1,22 +1,22 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription, Observable } from "rxjs";
-import { AuthService, AuthStatus } from "../../auth/auth.service";
-import { map } from "rxjs/operators";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
+import { AuthService, AuthStatus } from '../../auth/auth.service';
+import { map } from 'rxjs/operators';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   redirect?: string;
 
   authStatus$: Observable<AuthStatus>;
-  username: string = "";
-  password: string = "";
-  hide: boolean = true;
+  username = '';
+  password = '';
+  hide = true;
 
   constructor(
     private router: Router,
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatus$ = this.authService.state$.pipe(map(s => s.status));
     this.subscription.add(
       this.route.queryParams.subscribe(
-        params => (this.redirect = params["redirect"])
+        params => (this.redirect = params.redirect)
       )
     );
     this.subscription.add(
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (s.status !== AuthStatus.Authenticated) {
           return;
         }
-        this.router.navigate([this.redirect || "/"]);
+        this.router.navigate([this.redirect || '/']);
       })
     );
   }

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Output, Input } from "@angular/core";
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
-  selector: "app-todolist-new-item",
-  templateUrl: "./todolist-new-item.component.html",
-  styleUrls: ["./todolist-new-item.component.css"]
+  selector: 'app-todolist-new-item',
+  templateUrl: './todolist-new-item.component.html',
+  styleUrls: ['./todolist-new-item.component.css']
 })
 export class TodolistNewItemComponent {
   @Input()
@@ -12,10 +12,10 @@ export class TodolistNewItemComponent {
   @Output()
   addTodo = new EventEmitter<string>();
 
-  taskName = "";
+  taskName = '';
 
   add() {
     this.addTodo.emit(this.taskName);
-    this.taskName = "";
+    this.taskName = '';
   }
 }

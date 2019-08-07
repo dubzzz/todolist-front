@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { AuthService } from "src/app/auth/auth.service";
-import { TodolistService, TodolistState } from "../todolist.service";
-import { Observable } from "rxjs";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
+import { TodolistService, TodolistState } from '../todolist.service';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: "app-todolist",
-  templateUrl: "./todolist.component.html",
-  styleUrls: ["./todolist.component.css"]
+  selector: 'app-todolist',
+  templateUrl: './todolist.component.html',
+  styleUrls: ['./todolist.component.css']
 })
 export class TodolistComponent implements OnInit, OnDestroy {
   todoState$: Observable<TodolistState>;

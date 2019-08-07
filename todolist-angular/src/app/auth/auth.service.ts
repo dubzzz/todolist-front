@@ -1,11 +1,23 @@
-import { Injectable } from "@angular/core";
-import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { map } from "rxjs/operators";
-import * as Api from "../../api";
-import { Router, RouterStateSnapshot } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as Api from '../../api';
+import { Router, RouterStateSnapshot } from '@angular/router';
+
+export enum AuthStatus {
+  NonAuthenticated = 'NonAuthenticated',
+  OnGoingAuthentication = 'OnGoingAuthentication',
+  Authenticated = 'Authenticated'
+}
+
+export interface AuthState {
+  token: string;
+  username: string;
+  status: AuthStatus;
+}
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthService {
   private subject: Subject<AuthState>;
@@ -13,8 +25,8 @@ export class AuthService {
   readonly isAuthenticated$: Observable<boolean>;
 
   constructor(readonly router: Router) {
-    const username = Api.readStorage("AuthenticationProvider", "username");
-    const token = Api.readStorage("AuthenticationProvider", "token");
+    const username = Api.readStorage('AuthenticationProvider', 'username');
+    const token = Api.readStorage('AuthenticationProvider', 'token');
 
     this.subject = new BehaviorSubject({
       token,
@@ -52,8 +64,8 @@ export class AuthService {
 
   async login(username: string, password: string) {
     this.subject.next({
-      token: "",
-      username: username,
+      token: '',
+      username,
       status: AuthStatus.OnGoingAuthentication
     });
     try {
@@ -63,12 +75,12 @@ export class AuthService {
         username: tokens.username,
         status: AuthStatus.Authenticated
       });
-      Api.writeStorage("AuthenticationProvider", "username", tokens.username);
-      Api.writeStorage("AuthenticationProvider", "token", tokens.token);
+      Api.writeStorage('AuthenticationProvider', 'username', tokens.username);
+      Api.writeStorage('AuthenticationProvider', 'token', tokens.token);
     } catch (err) {
       this.subject.next({
-        token: "",
-        username: username,
+        token: '',
+        username,
         status: AuthStatus.NonAuthenticated
       });
     }
@@ -76,32 +88,20 @@ export class AuthService {
 
   logout() {
     this.subject.next({
-      token: "",
-      username: "",
+      token: '',
+      username: '',
       status: AuthStatus.NonAuthenticated
     });
-    Api.clearStorage("AuthenticationProvider", "username");
-    Api.clearStorage("AuthenticationProvider", "token");
+    Api.clearStorage('AuthenticationProvider', 'username');
+    Api.clearStorage('AuthenticationProvider', 'token');
     this.redirectToLogin(this.router.routerState.snapshot);
   }
 
   redirectToLogin(state: RouterStateSnapshot) {
-    this.router.navigate(["/login"], {
+    this.router.navigate(['/login'], {
       queryParams: {
         redirect: state.url
       }
     });
   }
 }
-
-export enum AuthStatus {
-  NonAuthenticated = "NonAuthenticated",
-  OnGoingAuthentication = "OnGoingAuthentication",
-  Authenticated = "Authenticated"
-}
-
-export type AuthState = {
-  token: string;
-  username: string;
-  status: AuthStatus;
-};

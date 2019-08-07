@@ -5,16 +5,16 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy
-} from "@angular/core";
-import { AuthService } from "../../auth/auth.service";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { TodolistService } from "../todolist/todolist.service";
+} from '@angular/core';
+import { AuthService } from '../../auth/auth.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { TodolistService } from '../todolist/todolist.service';
 
 @Component({
-  selector: "app-authenticated-header",
-  templateUrl: "./authenticated-header.component.html",
-  styleUrls: ["./authenticated-header.component.css"]
+  selector: 'app-authenticated-header',
+  templateUrl: './authenticated-header.component.html',
+  styleUrls: ['./authenticated-header.component.css']
 })
 export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
   @Input() expandedMenu: boolean;

@@ -1,31 +1,31 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { AuthGuardService } from "../auth/auth-guard.service";
-import { AuthenticatedComponent } from "./authenticated/authenticated.component";
-import { TodolistComponent } from "./todolist/todolist/todolist.component";
-import { LearnMoreComponent } from "./learn-more/learn-more/learn-more.component";
-import { NotFoundComponent } from "./not-found/not-found/not-found.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuardService } from '../auth/auth-guard.service';
+import { AuthenticatedComponent } from './authenticated/authenticated.component';
+import { TodolistComponent } from './todolist/todolist/todolist.component';
+import { LearnMoreComponent } from './learn-more/learn-more/learn-more.component';
+import { NotFoundComponent } from './not-found/not-found/not-found.component';
 
 const authenticatedRoutes: Routes = [
   {
-    path: "",
+    path: '',
     component: AuthenticatedComponent,
     canActivate: [AuthGuardService],
     children: [
       {
-        path: "",
+        path: '',
         canActivateChild: [AuthGuardService],
         children: [
           {
-            path: "",
+            path: '',
             component: TodolistComponent
           },
           {
-            path: "learn-more",
+            path: 'learn-more',
             component: LearnMoreComponent
           },
           {
-            path: "**",
+            path: '**',
             component: NotFoundComponent
           }
         ]

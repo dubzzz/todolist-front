@@ -1,29 +1,29 @@
-import { Injectable, Component, OnInit, OnDestroy } from "@angular/core";
-import * as Api from "../../../api";
-import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { AuthService } from "src/app/auth/auth.service";
+import { Injectable, Component, OnInit, OnDestroy } from '@angular/core';
+import * as Api from '../../../api';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 export enum TodoSyncState {
-  Noop = "noop",
-  Add = "add",
-  Edit = "edit",
-  Remove = "remove"
+  Noop = 'noop',
+  Add = 'add',
+  Edit = 'edit',
+  Remove = 'remove'
 }
 
-export type TodolistState = {
+export interface TodolistState {
   readonly ready: boolean;
   readonly todos: ReadonlyArray<{
     readonly data: Api.Todo;
     readonly state: TodoSyncState;
   }>;
-};
+}
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class TodolistService {
-  private token = "";
-  private todos: TodolistState["todos"];
+  private token = '';
+  private todos: TodolistState['todos'];
   private subject: Subject<TodolistState>;
   readonly state$: Observable<TodolistState>;
 
@@ -43,7 +43,7 @@ export class TodolistService {
     });
   }
 
-  private updateTodos(todos: TodolistState["todos"]) {
+  private updateTodos(todos: TodolistState['todos']) {
     this.todos = todos;
     this.subject.next({ ready: true, todos });
   }
