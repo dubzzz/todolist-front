@@ -90,7 +90,7 @@ export class TodolistService {
           : t
       )
     ]);
-    const r = await Api.editTodo(this.token, todo.data);
+    const r = await Api.editTodo(this.token, newData);
     if (r) {
       this.updateTodos(
         this.todos.map(t =>
