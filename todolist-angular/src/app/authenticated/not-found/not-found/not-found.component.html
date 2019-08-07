@@ -1,1 +1,21 @@
-<p>not-found works!</p>
+<div id="content">
+  <mat-card>
+    <img
+      mat-card-image
+      src="https://upload.wikimedia.org/wikipedia/commons/0/07/Wrong_Way_Go_Back.svg"
+      alt="Back home"
+    />
+    <mat-card-header>
+      <mat-card-title>Wrong way</mat-card-title>
+      <mat-card-subtitle
+        >The page you are looking for does not exist</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content></mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="backHome()">
+        Back home
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
