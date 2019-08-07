@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as Api from '../../api';
 import { Router, RouterStateSnapshot } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum AuthStatus {
   NonAuthenticated = 'NonAuthenticated',
@@ -24,7 +25,7 @@ export class AuthService {
   readonly state$: Observable<AuthState>;
   readonly isAuthenticated$: Observable<boolean>;
 
-  constructor(readonly router: Router) {
+  constructor(readonly router: Router, readonly snackBar: MatSnackBar) {
     const username = Api.readStorage('AuthenticationProvider', 'username');
     const token = Api.readStorage('AuthenticationProvider', 'token');
 
@@ -50,6 +51,9 @@ export class AuthService {
             token,
             username,
             status: AuthStatus.Authenticated
+          });
+          this.snackBar.open('Login successful', '', {
+            duration: 1000
           });
         } else {
           this.subject.next({
@@ -77,16 +81,22 @@ export class AuthService {
       });
       Api.writeStorage('AuthenticationProvider', 'username', tokens.username);
       Api.writeStorage('AuthenticationProvider', 'token', tokens.token);
+      this.snackBar.open('Login successful', '', {
+        duration: 1000
+      });
     } catch (err) {
       this.subject.next({
         token: '',
         username,
         status: AuthStatus.NonAuthenticated
       });
+      this.snackBar.open('Login failure', '', {
+        duration: 1000
+      });
     }
   }
 
-  logout() {
+  logout(silent?: boolean) {
     this.subject.next({
       token: '',
       username: '',
@@ -94,6 +104,11 @@ export class AuthService {
     });
     Api.clearStorage('AuthenticationProvider', 'username');
     Api.clearStorage('AuthenticationProvider', 'token');
+    if (!silent) {
+      this.snackBar.open('Logout successful', '', {
+        duration: 1000
+      });
+    }
     this.redirectToLogin(this.router.routerState.snapshot);
   }
 

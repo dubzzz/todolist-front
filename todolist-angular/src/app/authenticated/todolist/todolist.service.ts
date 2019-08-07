@@ -2,6 +2,7 @@ import { Injectable, Component, OnInit, OnDestroy } from '@angular/core';
 import * as Api from '../../../api';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum TodoSyncState {
   Noop = 'noop',
@@ -30,7 +31,10 @@ export class TodolistService {
   private todoListenerHandle: Api.TodoListenerHandle | null;
   private requesters = new Set<OnInit & OnDestroy>();
 
-  constructor(readonly authService: AuthService) {
+  constructor(
+    readonly authService: AuthService,
+    readonly snackBar: MatSnackBar
+  ) {
     this.todos = [];
     this.subject = new BehaviorSubject({ ready: false, todos: this.todos });
     this.state$ = this.subject.asObservable();
@@ -68,6 +72,9 @@ export class TodolistService {
       );
     } else {
       this.updateTodos(this.todos.filter(t => t.data.guid !== todo.guid));
+      this.snackBar.open(`Failed to add todo: ${todo.task}`, '', {
+        duration: 1000
+      });
     }
   }
 
@@ -76,6 +83,13 @@ export class TodolistService {
       t => t.data.guid === guid && t.state === TodoSyncState.Noop
     );
     if (!todo) {
+      this.snackBar.open(
+        `No todo available for modification given guid ${guid}`,
+        '',
+        {
+          duration: 1000
+        }
+      );
       return;
     }
 
@@ -110,6 +124,9 @@ export class TodolistService {
             : t
         )
       );
+      this.snackBar.open(`Failed to edit todo: ${todo.data.task}`, '', {
+        duration: 1000
+      });
     }
   }
 
@@ -118,6 +135,13 @@ export class TodolistService {
       t => t.data.guid === guid && t.state === TodoSyncState.Noop
     );
     if (!todo) {
+      this.snackBar.open(
+        `No todo available for modification given guid ${guid}`,
+        '',
+        {
+          duration: 1000
+        }
+      );
       return;
     }
     this.updateTodos([
@@ -141,6 +165,9 @@ export class TodolistService {
             : t
         )
       );
+      this.snackBar.open(`Failed to remove todo: ${todo.data.task}`, '', {
+        duration: 1000
+      });
     }
   }
 
@@ -187,7 +214,10 @@ export class TodolistService {
         this.updateTodos(updatedTodos);
       },
       () => {
-        this.authService.logout();
+        this.snackBar.open('Revoked token, connection lost', '', {
+          duration: 1000
+        });
+        this.authService.logout(true);
       }
     );
   }

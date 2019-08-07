@@ -6,19 +6,26 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TodolistNewItemComponent } from './todolist-new-item/todolist-new-item.component';
 import { TodolistListComponent } from './todolist-list/todolist-list.component';
 import { TodolistListItemComponent } from './todolist-list-item/todolist-list-item.component';
 
 @NgModule({
-  declarations: [TodolistComponent, TodolistNewItemComponent, TodolistListComponent, TodolistListItemComponent],
+  declarations: [
+    TodolistComponent,
+    TodolistNewItemComponent,
+    TodolistListComponent,
+    TodolistListItemComponent
+  ],
   imports: [
     CommonModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatSnackBarModule
   ]
 })
 export class TodolistModule {}
