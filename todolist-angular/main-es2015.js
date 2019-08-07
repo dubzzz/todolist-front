@@ -48,28 +48,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵ3", function() { return ɵ3; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵ4", function() { return ɵ4; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* Login API */
+/* Helpers */
 
-const validPassword = "password";
+const delay = (ms) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(), ms);
+    });
+};
+const ɵ0 = delay;
+const success = (out, ms) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(out), ms);
+    });
+};
+const ɵ1 = success;
+const failure = (ms) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject(), ms);
+    });
+};
+const ɵ2 = failure;
+const validPassword = 'password';
 const getValidToken = () => {
-    const token = window.validToken || "w€lc0Me";
+    const token = window.validToken || 'w€lc0Me';
     window.validToken = token;
     return token;
 };
-const ɵ0 = getValidToken;
+const ɵ3 = getValidToken;
 const login = (username, password) => {
-    if (password !== validPassword)
+    if (password !== validPassword) {
         return failure(500);
+    }
     return success({ username, token: getValidToken() }, 500);
 };
 const checkToken = (token) => {
-    if (token !== getValidToken())
+    if (token !== getValidToken()) {
         return success(false, 500);
+    }
     return success(true, 500);
 };
 /* Storage API */
 const readStorage = (space, keyName) => {
-    return localStorage.getItem(`${space}::${keyName}`) || "";
+    return localStorage.getItem(`${space}::${keyName}`) || '';
 };
 const writeStorage = (space, keyName, value) => {
     return localStorage.setItem(`${space}::${keyName}`, value);
@@ -78,22 +98,26 @@ const clearStorage = (space, keyName) => {
     return localStorage.removeItem(`${space}::${keyName}`);
 };
 const readTodos = () => {
-    const raw = readStorage("Todos", "data");
-    if (!raw)
+    const raw = readStorage('Todos', 'data');
+    if (!raw) {
         return [];
+    }
     return JSON.parse(raw);
 };
-const ɵ1 = readTodos;
+const ɵ4 = readTodos;
 const addTodoListener = (token, fn, connectionLost) => {
     const handle = { _i: {} };
     const changeDetected = (newData) => {
-        if (handle._i._data === undefined)
+        if (handle._i._data === undefined) {
             return true;
-        if (handle._i._data.length !== newData.length)
+        }
+        if (handle._i._data.length !== newData.length) {
             return true;
+        }
         const sameTodo = (t1, t2) => t1.guid === t2.guid && t1.task === t2.task && t1.done === t2.done;
-        if (handle._i._data.some((p, idx) => !sameTodo(p, newData[idx])))
+        if (handle._i._data.some((p, idx) => !sameTodo(p, newData[idx]))) {
             return true;
+        }
         return false;
     };
     const detectChanges = () => {
@@ -119,53 +143,40 @@ const removeTodoListener = (handle) => {
 };
 const addTodo = (token, todo) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](undefined, void 0, void 0, function* () {
     yield delay(500);
-    if (token !== getValidToken())
+    if (token !== getValidToken()) {
         return false;
+    }
     const data = readTodos();
-    if (data.some(t => t.guid === todo.guid))
+    if (data.some(t => t.guid === todo.guid)) {
         return false;
-    writeStorage("Todos", "data", JSON.stringify([...data, todo]));
+    }
+    writeStorage('Todos', 'data', JSON.stringify([...data, todo]));
     return true;
 });
 const editTodo = (token, todo) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](undefined, void 0, void 0, function* () {
     yield delay(500);
-    if (token !== getValidToken())
+    if (token !== getValidToken()) {
         return false;
+    }
     const data = readTodos();
-    if (!data.some(t => t.guid === todo.guid))
+    if (!data.some(t => t.guid === todo.guid)) {
         return false;
-    writeStorage("Todos", "data", JSON.stringify(data.map(t => (t.guid === todo.guid ? todo : t))));
+    }
+    writeStorage('Todos', 'data', JSON.stringify(data.map(t => (t.guid === todo.guid ? todo : t))));
     return true;
 });
 const removeTodo = (token, todo) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](undefined, void 0, void 0, function* () {
     yield delay(500);
-    if (token !== getValidToken())
+    if (token !== getValidToken()) {
         return false;
+    }
     const data = readTodos();
-    if (!data.some(t => t.guid === todo.guid))
+    if (!data.some(t => t.guid === todo.guid)) {
         return false;
-    writeStorage("Todos", "data", JSON.stringify(data.filter(t => t.guid !== todo.guid)));
+    }
+    writeStorage('Todos', 'data', JSON.stringify(data.filter(t => t.guid !== todo.guid)));
     return true;
 });
-/* Helpers */
-const delay = (ms) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), ms);
-    });
-};
-const ɵ2 = delay;
-const success = (out, ms) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(out), ms);
-    });
-};
-const ɵ3 = success;
-const failure = (ms) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => reject(), ms);
-    });
-};
-const ɵ4 = failure;
 
 
 
@@ -192,11 +203,11 @@ __webpack_require__.r(__webpack_exports__);
 const ɵ0 = () => __webpack_require__.e(/*! import() | authenticated-authenticated-module-ngfactory */ "authenticated-authenticated-module-ngfactory").then(__webpack_require__.bind(null, /*! ./authenticated/authenticated.module.ngfactory */ "./src/app/authenticated/authenticated.module.ngfactory.js")).then(mod => mod.AuthenticatedModuleNgFactory), ɵ1 = { preload: true };
 const routes = [
     {
-        path: "login",
+        path: 'login',
         component: _login_login_login_component__WEBPACK_IMPORTED_MODULE_2__["LoginComponent"]
     },
     {
-        path: "",
+        path: '',
         loadChildren: ɵ0,
         canActivate: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
         data: ɵ1
@@ -455,13 +466,13 @@ AuthGuardService.ngInjectableDef = _angular_core__WEBPACK_IMPORTED_MODULE_1__["�
 /*!**************************************!*\
   !*** ./src/app/auth/auth.service.ts ***!
   \**************************************/
-/*! exports provided: AuthService, AuthStatus */
+/*! exports provided: AuthStatus, AuthService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthStatus", function() { return AuthStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
@@ -474,11 +485,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var AuthStatus;
+(function (AuthStatus) {
+    AuthStatus["NonAuthenticated"] = "NonAuthenticated";
+    AuthStatus["OnGoingAuthentication"] = "OnGoingAuthentication";
+    AuthStatus["Authenticated"] = "Authenticated";
+})(AuthStatus || (AuthStatus = {}));
 class AuthService {
     constructor(router) {
         this.router = router;
-        const username = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]("AuthenticationProvider", "username");
-        const token = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]("AuthenticationProvider", "token");
+        const username = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]('AuthenticationProvider', 'username');
+        const token = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]('AuthenticationProvider', 'token');
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]({
             token,
             username,
@@ -513,8 +530,8 @@ class AuthService {
     login(username, password) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             this.subject.next({
-                token: "",
-                username: username,
+                token: '',
+                username,
                 status: AuthStatus.OnGoingAuthentication
             });
             try {
@@ -524,13 +541,13 @@ class AuthService {
                     username: tokens.username,
                     status: AuthStatus.Authenticated
                 });
-                _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]("AuthenticationProvider", "username", tokens.username);
-                _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]("AuthenticationProvider", "token", tokens.token);
+                _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]('AuthenticationProvider', 'username', tokens.username);
+                _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]('AuthenticationProvider', 'token', tokens.token);
             }
             catch (err) {
                 this.subject.next({
-                    token: "",
-                    username: username,
+                    token: '',
+                    username,
                     status: AuthStatus.NonAuthenticated
                 });
             }
@@ -538,16 +555,16 @@ class AuthService {
     }
     logout() {
         this.subject.next({
-            token: "",
-            username: "",
+            token: '',
+            username: '',
             status: AuthStatus.NonAuthenticated
         });
-        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]("AuthenticationProvider", "username");
-        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]("AuthenticationProvider", "token");
+        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]('AuthenticationProvider', 'username');
+        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]('AuthenticationProvider', 'token');
         this.redirectToLogin(this.router.routerState.snapshot);
     }
     redirectToLogin(state) {
-        this.router.navigate(["/login"], {
+        this.router.navigate(['/login'], {
             queryParams: {
                 redirect: state.url
             }
@@ -555,12 +572,6 @@ class AuthService {
     }
 }
 AuthService.ngInjectableDef = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({ factory: function AuthService_Factory() { return new AuthService(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); }, token: AuthService, providedIn: "root" });
-var AuthStatus;
-(function (AuthStatus) {
-    AuthStatus["NonAuthenticated"] = "NonAuthenticated";
-    AuthStatus["OnGoingAuthentication"] = "OnGoingAuthentication";
-    AuthStatus["Authenticated"] = "Authenticated";
-})(AuthStatus || (AuthStatus = {}));
 
 
 /***/ }),
@@ -819,24 +830,24 @@ __webpack_require__.r(__webpack_exports__);
 
 const authenticatedRoutes = [
     {
-        path: "",
+        path: '',
         component: _authenticated_authenticated_component__WEBPACK_IMPORTED_MODULE_2__["AuthenticatedComponent"],
         canActivate: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
         children: [
             {
-                path: "",
+                path: '',
                 canActivateChild: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
                 children: [
                     {
-                        path: "",
+                        path: '',
                         component: _todolist_todolist_todolist_component__WEBPACK_IMPORTED_MODULE_3__["TodolistComponent"]
                     },
                     {
-                        path: "learn-more",
+                        path: 'learn-more',
                         component: _learn_more_learn_more_learn_more_component__WEBPACK_IMPORTED_MODULE_4__["LearnMoreComponent"]
                     },
                     {
-                        path: "**",
+                        path: '**',
                         component: _not_found_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_5__["NotFoundComponent"]
                     }
                 ]
@@ -1192,7 +1203,7 @@ class NotFoundComponent {
         this.router = router;
     }
     backHome() {
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
     }
 }
 
@@ -1525,11 +1536,11 @@ __webpack_require__.r(__webpack_exports__);
 class TodolistNewItemComponent {
     constructor() {
         this.addTodo = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.taskName = "";
+        this.taskName = '';
     }
     add() {
         this.addTodo.emit(this.taskName);
-        this.taskName = "";
+        this.taskName = '';
     }
 }
 
@@ -1584,7 +1595,7 @@ var TodoSyncState;
 class TodolistService {
     constructor(authService) {
         this.authService = authService;
-        this.token = "";
+        this.token = '';
         this.requesters = new Set();
         this.todos = [];
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({ ready: false, todos: this.todos });
@@ -2032,18 +2043,18 @@ class LoginComponent {
         this.route = route;
         this.authService = authService;
         this.subscription = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subscription"]();
-        this.username = "";
-        this.password = "";
+        this.username = '';
+        this.password = '';
         this.hide = true;
     }
     ngOnInit() {
         this.authStatus$ = this.authService.state$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(s => s.status));
-        this.subscription.add(this.route.queryParams.subscribe(params => (this.redirect = params["redirect"])));
+        this.subscription.add(this.route.queryParams.subscribe(params => (this.redirect = params.redirect)));
         this.subscription.add(this.authService.state$.subscribe(s => {
             if (s.status !== _auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthStatus"].Authenticated) {
                 return;
             }
-            this.router.navigate([this.redirect || "/"]);
+            this.router.navigate([this.redirect || '/']);
         }));
     }
     canLogin(authStatus) {

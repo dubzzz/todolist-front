@@ -48,29 +48,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵ3", function() { return ɵ3; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵ4", function() { return ɵ4; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* Login API */
+/* Helpers */
 var _this = undefined;
 
-var validPassword = "password";
+var delay = function (ms) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () { return resolve(); }, ms);
+    });
+};
+var ɵ0 = delay;
+var success = function (out, ms) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () { return resolve(out); }, ms);
+    });
+};
+var ɵ1 = success;
+var failure = function (ms) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () { return reject(); }, ms);
+    });
+};
+var ɵ2 = failure;
+var validPassword = 'password';
 var getValidToken = function () {
-    var token = window.validToken || "w€lc0Me";
+    var token = window.validToken || 'w€lc0Me';
     window.validToken = token;
     return token;
 };
-var ɵ0 = getValidToken;
+var ɵ3 = getValidToken;
 var login = function (username, password) {
-    if (password !== validPassword)
+    if (password !== validPassword) {
         return failure(500);
+    }
     return success({ username: username, token: getValidToken() }, 500);
 };
 var checkToken = function (token) {
-    if (token !== getValidToken())
+    if (token !== getValidToken()) {
         return success(false, 500);
+    }
     return success(true, 500);
 };
 /* Storage API */
 var readStorage = function (space, keyName) {
-    return localStorage.getItem(space + "::" + keyName) || "";
+    return localStorage.getItem(space + "::" + keyName) || '';
 };
 var writeStorage = function (space, keyName, value) {
     return localStorage.setItem(space + "::" + keyName, value);
@@ -79,24 +99,28 @@ var clearStorage = function (space, keyName) {
     return localStorage.removeItem(space + "::" + keyName);
 };
 var readTodos = function () {
-    var raw = readStorage("Todos", "data");
-    if (!raw)
+    var raw = readStorage('Todos', 'data');
+    if (!raw) {
         return [];
+    }
     return JSON.parse(raw);
 };
-var ɵ1 = readTodos;
+var ɵ4 = readTodos;
 var addTodoListener = function (token, fn, connectionLost) {
     var handle = { _i: {} };
     var changeDetected = function (newData) {
-        if (handle._i._data === undefined)
+        if (handle._i._data === undefined) {
             return true;
-        if (handle._i._data.length !== newData.length)
+        }
+        if (handle._i._data.length !== newData.length) {
             return true;
+        }
         var sameTodo = function (t1, t2) {
             return t1.guid === t2.guid && t1.task === t2.task && t1.done === t2.done;
         };
-        if (handle._i._data.some(function (p, idx) { return !sameTodo(p, newData[idx]); }))
+        if (handle._i._data.some(function (p, idx) { return !sameTodo(p, newData[idx]); })) {
             return true;
+        }
         return false;
     };
     var detectChanges = function () {
@@ -127,12 +151,14 @@ var addTodo = function (token, todo) { return tslib__WEBPACK_IMPORTED_MODULE_0__
             case 0: return [4 /*yield*/, delay(500)];
             case 1:
                 _a.sent();
-                if (token !== getValidToken())
+                if (token !== getValidToken()) {
                     return [2 /*return*/, false];
+                }
                 data = readTodos();
-                if (data.some(function (t) { return t.guid === todo.guid; }))
+                if (data.some(function (t) { return t.guid === todo.guid; })) {
                     return [2 /*return*/, false];
-                writeStorage("Todos", "data", JSON.stringify(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"](data, [todo])));
+                }
+                writeStorage('Todos', 'data', JSON.stringify(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"](data, [todo])));
                 return [2 /*return*/, true];
         }
     });
@@ -144,12 +170,14 @@ var editTodo = function (token, todo) { return tslib__WEBPACK_IMPORTED_MODULE_0_
             case 0: return [4 /*yield*/, delay(500)];
             case 1:
                 _a.sent();
-                if (token !== getValidToken())
+                if (token !== getValidToken()) {
                     return [2 /*return*/, false];
+                }
                 data = readTodos();
-                if (!data.some(function (t) { return t.guid === todo.guid; }))
+                if (!data.some(function (t) { return t.guid === todo.guid; })) {
                     return [2 /*return*/, false];
-                writeStorage("Todos", "data", JSON.stringify(data.map(function (t) { return (t.guid === todo.guid ? todo : t); })));
+                }
+                writeStorage('Todos', 'data', JSON.stringify(data.map(function (t) { return (t.guid === todo.guid ? todo : t); })));
                 return [2 /*return*/, true];
         }
     });
@@ -161,35 +189,18 @@ var removeTodo = function (token, todo) { return tslib__WEBPACK_IMPORTED_MODULE_
             case 0: return [4 /*yield*/, delay(500)];
             case 1:
                 _a.sent();
-                if (token !== getValidToken())
+                if (token !== getValidToken()) {
                     return [2 /*return*/, false];
+                }
                 data = readTodos();
-                if (!data.some(function (t) { return t.guid === todo.guid; }))
+                if (!data.some(function (t) { return t.guid === todo.guid; })) {
                     return [2 /*return*/, false];
-                writeStorage("Todos", "data", JSON.stringify(data.filter(function (t) { return t.guid !== todo.guid; })));
+                }
+                writeStorage('Todos', 'data', JSON.stringify(data.filter(function (t) { return t.guid !== todo.guid; })));
                 return [2 /*return*/, true];
         }
     });
 }); };
-/* Helpers */
-var delay = function (ms) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () { return resolve(); }, ms);
-    });
-};
-var ɵ2 = delay;
-var success = function (out, ms) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () { return resolve(out); }, ms);
-    });
-};
-var ɵ3 = success;
-var failure = function (ms) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () { return reject(); }, ms);
-    });
-};
-var ɵ4 = failure;
 
 
 
@@ -218,11 +229,11 @@ var ɵ0 = function () {
 }, ɵ1 = { preload: true };
 var routes = [
     {
-        path: "login",
+        path: 'login',
         component: _login_login_login_component__WEBPACK_IMPORTED_MODULE_2__["LoginComponent"]
     },
     {
-        path: "",
+        path: '',
         loadChildren: ɵ0,
         canActivate: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
         data: ɵ1
@@ -496,13 +507,13 @@ var AuthGuardService = /** @class */ (function () {
 /*!**************************************!*\
   !*** ./src/app/auth/auth.service.ts ***!
   \**************************************/
-/*! exports provided: AuthService, AuthStatus */
+/*! exports provided: AuthStatus, AuthService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthStatus", function() { return AuthStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
@@ -515,12 +526,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var AuthStatus;
+(function (AuthStatus) {
+    AuthStatus["NonAuthenticated"] = "NonAuthenticated";
+    AuthStatus["OnGoingAuthentication"] = "OnGoingAuthentication";
+    AuthStatus["Authenticated"] = "Authenticated";
+})(AuthStatus || (AuthStatus = {}));
 var AuthService = /** @class */ (function () {
     function AuthService(router) {
         var _this = this;
         this.router = router;
-        var username = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]("AuthenticationProvider", "username");
-        var token = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]("AuthenticationProvider", "token");
+        var username = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]('AuthenticationProvider', 'username');
+        var token = _api__WEBPACK_IMPORTED_MODULE_3__["readStorage"]('AuthenticationProvider', 'token');
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]({
             token: token,
             username: username,
@@ -559,7 +576,7 @@ var AuthService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         this.subject.next({
-                            token: "",
+                            token: '',
                             username: username,
                             status: AuthStatus.OnGoingAuthentication
                         });
@@ -574,13 +591,13 @@ var AuthService = /** @class */ (function () {
                             username: tokens.username,
                             status: AuthStatus.Authenticated
                         });
-                        _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]("AuthenticationProvider", "username", tokens.username);
-                        _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]("AuthenticationProvider", "token", tokens.token);
+                        _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]('AuthenticationProvider', 'username', tokens.username);
+                        _api__WEBPACK_IMPORTED_MODULE_3__["writeStorage"]('AuthenticationProvider', 'token', tokens.token);
                         return [3 /*break*/, 4];
                     case 3:
                         err_1 = _a.sent();
                         this.subject.next({
-                            token: "",
+                            token: '',
                             username: username,
                             status: AuthStatus.NonAuthenticated
                         });
@@ -592,16 +609,16 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.logout = function () {
         this.subject.next({
-            token: "",
-            username: "",
+            token: '',
+            username: '',
             status: AuthStatus.NonAuthenticated
         });
-        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]("AuthenticationProvider", "username");
-        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]("AuthenticationProvider", "token");
+        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]('AuthenticationProvider', 'username');
+        _api__WEBPACK_IMPORTED_MODULE_3__["clearStorage"]('AuthenticationProvider', 'token');
         this.redirectToLogin(this.router.routerState.snapshot);
     };
     AuthService.prototype.redirectToLogin = function (state) {
-        this.router.navigate(["/login"], {
+        this.router.navigate(['/login'], {
             queryParams: {
                 redirect: state.url
             }
@@ -611,12 +628,6 @@ var AuthService = /** @class */ (function () {
     return AuthService;
 }());
 
-var AuthStatus;
-(function (AuthStatus) {
-    AuthStatus["NonAuthenticated"] = "NonAuthenticated";
-    AuthStatus["OnGoingAuthentication"] = "OnGoingAuthentication";
-    AuthStatus["Authenticated"] = "Authenticated";
-})(AuthStatus || (AuthStatus = {}));
 
 
 /***/ }),
@@ -879,24 +890,24 @@ __webpack_require__.r(__webpack_exports__);
 
 var authenticatedRoutes = [
     {
-        path: "",
+        path: '',
         component: _authenticated_authenticated_component__WEBPACK_IMPORTED_MODULE_2__["AuthenticatedComponent"],
         canActivate: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
         children: [
             {
-                path: "",
+                path: '',
                 canActivateChild: [_auth_auth_guard_service__WEBPACK_IMPORTED_MODULE_1__["AuthGuardService"]],
                 children: [
                     {
-                        path: "",
+                        path: '',
                         component: _todolist_todolist_todolist_component__WEBPACK_IMPORTED_MODULE_3__["TodolistComponent"]
                     },
                     {
-                        path: "learn-more",
+                        path: 'learn-more',
                         component: _learn_more_learn_more_learn_more_component__WEBPACK_IMPORTED_MODULE_4__["LearnMoreComponent"]
                     },
                     {
-                        path: "**",
+                        path: '**',
                         component: _not_found_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_5__["NotFoundComponent"]
                     }
                 ]
@@ -1274,7 +1285,7 @@ var NotFoundComponent = /** @class */ (function () {
         this.router = router;
     }
     NotFoundComponent.prototype.backHome = function () {
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
     };
     return NotFoundComponent;
 }());
@@ -1613,11 +1624,11 @@ __webpack_require__.r(__webpack_exports__);
 var TodolistNewItemComponent = /** @class */ (function () {
     function TodolistNewItemComponent() {
         this.addTodo = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.taskName = "";
+        this.taskName = '';
     }
     TodolistNewItemComponent.prototype.add = function () {
         this.addTodo.emit(this.taskName);
-        this.taskName = "";
+        this.taskName = '';
     };
     return TodolistNewItemComponent;
 }());
@@ -1679,7 +1690,7 @@ var TodolistService = /** @class */ (function () {
     function TodolistService(authService) {
         var _this = this;
         this.authService = authService;
-        this.token = "";
+        this.token = '';
         this.requesters = new Set();
         this.todos = [];
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({ ready: false, todos: this.todos });
@@ -2180,19 +2191,19 @@ var LoginComponent = /** @class */ (function () {
         this.route = route;
         this.authService = authService;
         this.subscription = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subscription"]();
-        this.username = "";
-        this.password = "";
+        this.username = '';
+        this.password = '';
         this.hide = true;
     }
     LoginComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.authStatus$ = this.authService.state$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (s) { return s.status; }));
-        this.subscription.add(this.route.queryParams.subscribe(function (params) { return (_this.redirect = params["redirect"]); }));
+        this.subscription.add(this.route.queryParams.subscribe(function (params) { return (_this.redirect = params.redirect); }));
         this.subscription.add(this.authService.state$.subscribe(function (s) {
             if (s.status !== _auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthStatus"].Authenticated) {
                 return;
             }
-            _this.router.navigate([_this.redirect || "/"]);
+            _this.router.navigate([_this.redirect || '/']);
         }));
     };
     LoginComponent.prototype.canLogin = function (authStatus) {
