@@ -12,7 +12,7 @@ script:
   - mv todolist-react-redux-saga/build build/todolist-react-redux-saga
   - mv todolist-react-redux-thunk/build build/todolist-react-redux-thunk
   - mv todolist-angular/dist/todolist-angular build/todolist-angular
-  - mv todolist-angular/dist/todolist-angular-ngxs build/todolist-angular-ngxs
+  - mv todolist-angular-ngxs/dist/todolist-angular-ngxs build/todolist-angular-ngxs
 
 deploy:
   provider: pages
