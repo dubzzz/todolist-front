@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "./store";
 
 import "vue-material/dist/vue-material.min.css";
 import "vue-material/dist/theme/default.css";
@@ -19,5 +20,6 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");
