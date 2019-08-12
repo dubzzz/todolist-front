@@ -6,3 +6,4 @@ Flavors:
 - React based on context API and Hooks: https://dubzzz.github.io/todolist-front/todolist-react/
 - React based on redux-saga and Hooks: https://dubzzz.github.io/todolist-front/todolist-react-redux-saga/
 - React based on redux-thunk and Hooks: https://dubzzz.github.io/todolist-front/todolist-react-redux-thunk/
+- Vue based on vuex: https://dubzzz.github.io/todolist-front/todolist-vue/
