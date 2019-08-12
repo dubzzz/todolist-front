@@ -21,7 +21,7 @@ const initialState: TodolistState = {
   todos: []
 };
 
-export default (state = initialState, action: Actions) => {
+export default (state = initialState, action: Actions): typeof state => {
   switch (action.type) {
     case TODOLIST_ADD_OR_EDIT_TODO: {
       const { todo, state: todoState } = action.payload;

@@ -15,7 +15,7 @@ const initialState: NotificationState = {
   notifications: []
 };
 
-export default (state = initialState, action: Actions) => {
+export default (state = initialState, action: Actions): typeof state => {
   switch (action.type) {
     case NOTIFICATION_ADD: {
       const { id, message, level } = action.payload;

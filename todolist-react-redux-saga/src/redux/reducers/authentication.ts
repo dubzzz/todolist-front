@@ -22,17 +22,17 @@ const initialState: AuthenticationState = {
   status: AuthenticationStatus.NonAuthenticated
 };
 
-export default function(state = initialState, action: Actions) {
+export default function(state = initialState, action: Actions): typeof state {
   switch (action.type) {
     case AUTHENTICATION_LOGIN_SUCCESS: {
       const { username, token } = action.payload;
-      return { ...state, username, token, state: AuthenticationStatus.Authenticated };
+      return { ...state, username, token, status: AuthenticationStatus.Authenticated };
     }
     case AUTHENTICATION_LOGIN_FAILURE: {
-      return { ...state, state: AuthenticationStatus.NonAuthenticated };
+      return { ...state, status: AuthenticationStatus.NonAuthenticated };
     }
     case AUTHENTICATION_LOGIN_ON_GOING: {
-      return { ...state, state: AuthenticationStatus.OnGoingAuthentication };
+      return { ...state, status: AuthenticationStatus.OnGoingAuthentication };
     }
     default:
       return state;
