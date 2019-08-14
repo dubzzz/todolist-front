@@ -25,7 +25,7 @@
       </md-card-content>
 
       <md-card-actions>
-        <md-button>Login</md-button>
+        <md-button v-bind:disabled="!canLogin" v-on:click="login()">Login</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -35,6 +35,8 @@
 import Vue from "vue";
 import { MdButton, MdCard, MdField } from "vue-material/dist/components";
 
+import { AuthenticationStatus } from "../store/modules/authentication";
+
 Vue.use(MdButton);
 Vue.use(MdCard);
 Vue.use(MdField);
@@ -42,7 +44,25 @@ Vue.use(MdField);
 export default {
   name: "LoginPage",
   props: { redirect: String },
-  data: () => ({ username: "", password: "" })
+  data: () => ({ username: "", password: "" }),
+  computed: {
+    canLogin() {
+      return (
+        this.$store.state.authentication.status !==
+          AuthenticationStatus.OnGoingAuthentication &&
+        this.username.length !== 0 &&
+        this.password.length !== 0
+      );
+    }
+  },
+  methods: {
+    login() {
+      this.$store.dispatch("authentication/loginByCreds", {
+        username: this.username,
+        password: this.password
+      });
+    }
+  }
 };
 </script>
 

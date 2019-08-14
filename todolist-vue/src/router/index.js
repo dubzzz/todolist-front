@@ -22,6 +22,10 @@ const router = new VueRouter({
   ]
 });
 
+router.onReady(() => {
+  store.dispatch("authentication/loginByToken");
+});
+
 router.beforeEach((to, from, next) => {
   const isAuthenticated =
     store.state.authentication.status === AuthenticationStatus.Authenticated;
