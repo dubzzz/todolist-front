@@ -30,7 +30,6 @@ const router = new VueRouter({
     },
     {
       path: "/",
-      name: "home",
       component: AuthenticatedPage,
       children: [
         {
