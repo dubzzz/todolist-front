@@ -35,7 +35,7 @@
 import Vue from "vue";
 import { MdButton, MdCard, MdField } from "vue-material/dist/components";
 
-import { AuthenticationStatus } from "../store/modules/authentication";
+import { AuthenticationStatus } from "../../store/modules/authentication";
 
 Vue.use(MdButton);
 Vue.use(MdCard);

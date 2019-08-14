@@ -3,8 +3,9 @@ import VueRouter from "vue-router";
 import store from "../store";
 import { AuthenticationStatus } from "../store/modules/authentication";
 
-const AuthenticatedPage = () => import("../components/AuthenticatedPage.vue");
-const LoginPage = () => import("../components/LoginPage.vue");
+const AuthenticatedPage = () =>
+  import("../components/authenticated/AuthenticatedPage.vue");
+const LoginPage = () => import("../components/login/LoginPage.vue");
 
 Vue.use(VueRouter);
 
