@@ -1,3 +1,4 @@
+import router from "../../router";
 import * as Api from "../../api";
 
 export const AuthenticationStatus = {
@@ -30,6 +31,7 @@ const actions = {
     if (success) {
       persistTokens(username, token);
       commit("loginSuccess", { username, token });
+      router.push(router.currentRoute.query.redirect || "/");
     } else commit("loginFailure");
   },
   async loginByCreds({ commit }, { username, password }) {
@@ -41,6 +43,7 @@ const actions = {
         username: tokens.username,
         token: tokens.token
       });
+      router.push(router.currentRoute.query.redirect || "/");
     } catch (err) {
       commit("loginFailure");
     }
@@ -49,6 +52,10 @@ const actions = {
     Api.clearStorage("AuthenticationProvider", "username");
     Api.clearStorage("AuthenticationProvider", "token");
     commit("loginFailure");
+    router.push({
+      path: "/login",
+      query: { redirect: router.currentRoute.fullPath }
+    });
   }
 };
 
