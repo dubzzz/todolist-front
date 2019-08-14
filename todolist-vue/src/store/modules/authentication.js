@@ -1,4 +1,3 @@
-import router from "../../router";
 import * as Api from "../../api";
 
 export const AuthenticationStatus = {
@@ -50,10 +49,6 @@ const actions = {
     Api.clearStorage("AuthenticationProvider", "username");
     Api.clearStorage("AuthenticationProvider", "token");
     commit("loginFailure");
-    router.push({
-      path: "/login",
-      query: { redirect: router.currentRoute.fullPath }
-    });
   }
 };
 
