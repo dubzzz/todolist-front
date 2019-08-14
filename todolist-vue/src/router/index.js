@@ -5,6 +5,12 @@ import { AuthenticationStatus } from "../store/modules/authentication";
 
 const AuthenticatedPage = () =>
   import("../components/authenticated/AuthenticatedPage.vue");
+const TodoListPage = () =>
+  import("../components/authenticated/list/TodoListPage.vue");
+const LearnMorePage = () =>
+  import("../components/authenticated/learn-more/LearnMorePage.vue");
+const NotFoundPage = () =>
+  import("../components/authenticated/not-found/NotFoundPage.vue");
 const LoginPage = () => import("../components/login/LoginPage.vue");
 
 Vue.use(VueRouter);
@@ -22,7 +28,28 @@ const router = new VueRouter({
       component: LoginPage,
       props: route => ({ redirect: route.query.redirect || "/" })
     },
-    { path: "*", name: "home", component: AuthenticatedPage }
+    {
+      path: "/",
+      name: "home",
+      component: AuthenticatedPage,
+      children: [
+        {
+          path: "learn-more",
+          name: "learn-more",
+          component: LearnMorePage
+        },
+        {
+          path: "",
+          name: "todolist",
+          component: TodoListPage
+        },
+        {
+          path: "*",
+          name: "not-found",
+          component: NotFoundPage
+        }
+      ]
+    }
   ]
 });
 

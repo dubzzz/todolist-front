@@ -33,7 +33,9 @@
           </md-list-item>
         </md-list>
       </md-app-drawer>
-      <md-app-content>AuthenticatedPage</md-app-content>
+      <md-app-content>
+        <router-view></router-view>
+      </md-app-content>
     </md-app>
   </div>
 </template>
