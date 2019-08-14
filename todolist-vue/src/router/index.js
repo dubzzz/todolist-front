@@ -9,7 +9,10 @@ const LoginPage = () => import("../components/LoginPage.vue");
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  base: process.env.NODE_ENV === "production" ? "/todolist-vue/" : "/",
+  base:
+    process.env.NODE_ENV === "production"
+      ? "/todolist-front/todolist-vue/"
+      : "/",
   mode: "hash",
   routes: [
     {
