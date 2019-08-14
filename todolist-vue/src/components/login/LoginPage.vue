@@ -20,7 +20,7 @@
         </md-field>
         <md-field>
           <label>Password</label>
-          <md-input v-model="password"></md-input>
+          <md-input v-model="password" type="password"></md-input>
         </md-field>
       </md-card-content>
 
@@ -68,7 +68,8 @@ export default {
         password: this.password
       });
     }
-  }, watch: {
+  },
+  watch: {
     isLogged: {
       immediate: true,
       handler: function() {
