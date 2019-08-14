@@ -31,7 +31,6 @@ const actions = {
     if (success) {
       persistTokens(username, token);
       commit("loginSuccess", { username, token });
-      router.push(router.currentRoute.query.redirect || "/");
     } else commit("loginFailure");
   },
   async loginByCreds({ commit }, { username, password }) {
@@ -43,7 +42,6 @@ const actions = {
         username: tokens.username,
         token: tokens.token
       });
-      router.push(router.currentRoute.query.redirect || "/");
     } catch (err) {
       commit("loginFailure");
     }

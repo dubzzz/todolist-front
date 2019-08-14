@@ -53,6 +53,12 @@ export default {
         this.username.length !== 0 &&
         this.password.length !== 0
       );
+    },
+    isLogged() {
+      return (
+        this.$store.state.authentication.status ===
+        AuthenticationStatus.Authenticated
+      );
     }
   },
   methods: {
@@ -61,6 +67,14 @@ export default {
         username: this.username,
         password: this.password
       });
+    }
+  }, watch: {
+    isLogged: {
+      immediate: true,
+      handler: function() {
+        if (!this.isLogged) return;
+        this.$router.push(this.redirect || "/");
+      }
     }
   }
 };
