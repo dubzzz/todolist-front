@@ -32,14 +32,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { MdButton, MdCard, MdField } from "vue-material/dist/components";
-
 import { AuthenticationStatus } from "../../store/modules/authentication";
-
-Vue.use(MdButton);
-Vue.use(MdCard);
-Vue.use(MdField);
 
 export default {
   name: "LoginPage",

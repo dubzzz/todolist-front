@@ -21,12 +21,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { MdButton, MdCard } from "vue-material/dist/components";
-
-Vue.use(MdButton);
-Vue.use(MdCard);
-
 export default {
   name: "NotFoundPage",
   methods: {

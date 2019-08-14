@@ -17,19 +17,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import {
-  MdButton,
-  MdCard,
-  MdCheckbox,
-  MdIcon
-} from "vue-material/dist/components";
-
-Vue.use(MdButton);
-Vue.use(MdCard);
-Vue.use(MdCheckbox);
-Vue.use(MdIcon);
-
 export default {
   name: "TodoListListEntry",
   props: { syncState: String, content: Object }

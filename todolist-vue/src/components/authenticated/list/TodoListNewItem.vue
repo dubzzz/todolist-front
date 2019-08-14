@@ -12,13 +12,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { MdButton, MdIcon, MdField } from "vue-material/dist/components";
-
-Vue.use(MdButton);
-Vue.use(MdIcon);
-Vue.use(MdField);
-
 export default {
   name: "TodoListNewItem",
   props: { ready: Boolean },

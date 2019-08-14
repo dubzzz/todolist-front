@@ -31,11 +31,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { MdButton } from "vue-material/dist/components";
-
-Vue.use(MdButton);
-
 export default {
   name: "LearnMorePage",
   methods: {

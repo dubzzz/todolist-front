@@ -41,26 +41,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import {
-  MdApp,
-  MdButton,
-  MdContent,
-  MdDrawer,
-  MdIcon,
-  MdList,
-  MdToolbar
-} from "vue-material/dist/components";
-
 import { AuthenticationStatus } from "../../store/modules/authentication";
-
-Vue.use(MdApp);
-Vue.use(MdButton);
-Vue.use(MdContent);
-Vue.use(MdDrawer);
-Vue.use(MdIcon);
-Vue.use(MdList);
-Vue.use(MdToolbar);
 
 export default {
   name: "AuthenticatedPage",

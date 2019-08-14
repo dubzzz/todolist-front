@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueMaterial from "vue-material";
 import store from "./store";
 
 import "vue-material/dist/vue-material.min.css";
@@ -9,6 +10,8 @@ import router from "./router";
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
+
+Vue.use(VueMaterial);
 
 new Vue({
   router,
