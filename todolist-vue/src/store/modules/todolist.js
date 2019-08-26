@@ -82,6 +82,27 @@ const actions = {
     } catch (err) {
       // ignore
     }
+  },
+  async requestTodolistUpdates({ commit, state }, { token, requester }) {
+    const handle =
+      state.handle ||
+      Api.addTodoListener(
+        token,
+        todos => commit("refreshTodosAction", { todos }),
+        () => {
+          // commit("authentication/logout", null, { root: true });
+        }
+      );
+    commit("addRequesterAction", { handle, requester });
+  },
+  async stopTodolistUpdates({ commit, state }, { requester }) {
+    const { handle, requesters } = state;
+    if (requesters.length === 1 && requesters[0] === requester) {
+      Api.removeTodoListener(handle);
+      commit("removeRequesterAction", { handle: null, requester });
+    } else {
+      commit("removeRequesterAction", { handle, requester });
+    }
   }
 };
 
@@ -95,6 +116,41 @@ const mutations = {
   },
   removeTodoAction(state, { guid }) {
     state.todos = state.todos.filter(t => t.data.guid !== guid);
+  },
+  refreshTodosAction(state, { todos }) {
+    const todosBeingAdded = state.todos
+      .filter(t => t.state === TodoState.Add)
+      .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+    const todosBeingEdited = state.todos
+      .filter(t => t.state === TodoState.Edit)
+      .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+    const todosBeingRemoved = state.todos
+      .filter(t => t.state === TodoState.Remove)
+      .reduce((acc, t) => ({ ...acc, [t.data.guid]: t.data }), {});
+
+    state.ready = true;
+    state.todos = todos
+      .filter(t => todosBeingAdded[t.guid] === undefined)
+      .map(t => {
+        // Remove, Edit and Noop
+        if (todosBeingEdited[t.guid])
+          return { state: TodoState.Edit, data: todosBeingEdited[t.guid] };
+        if (todosBeingRemoved[t.guid])
+          return { state: TodoState.Remove, data: todosBeingRemoved[t.guid] };
+        return { state: TodoState.Noop, data: t };
+      })
+      .concat(state.todos.filter(t => t.state === TodoState.Add)); // Add
+  },
+  addRequesterAction(state, { handle, requester }) {
+    state.handle = handle;
+    if (state.requesters.includes(requester)) {
+      return;
+    }
+    state.requesters.push(requester);
+  },
+  removeRequesterAction(state, { handle, requester }) {
+    state.handle = handle;
+    state.requesters = state.requesters.filter(r => r !== requester);
   }
 };
 

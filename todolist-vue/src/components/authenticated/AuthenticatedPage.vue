@@ -82,6 +82,16 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    const token = this.$store.state.authentication.token;
+    this.$store.dispatch("todolist/requestTodolistUpdates", {
+      token,
+      requester: this
+    });
+  },
+  destroyed() {
+    this.$store.dispatch("todolist/stopTodolistUpdates", { requester: this });
   }
 };
 </script>
