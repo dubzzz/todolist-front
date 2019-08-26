@@ -1,10 +1,5 @@
 import * as Api from "../../api";
-
-export const AuthenticationStatus = {
-  NonAuthenticated: "NonAuthenticated",
-  OnGoingAuthentication: "OnGoingAuthentication",
-  Authenticated: "Authenticated"
-};
+import { AuthenticationStatus } from "../models/authentication";
 
 const state = {
   username: "",

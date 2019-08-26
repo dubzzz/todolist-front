@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
-import { AuthenticationStatus } from "../store/modules/authentication";
+import { AuthenticationStatus } from "../store/models/authentication";
 
 const AuthenticatedPage = () =>
   import("../components/authenticated/AuthenticatedPage.vue");

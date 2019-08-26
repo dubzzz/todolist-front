@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { AuthenticationStatus } from "../../store/modules/authentication";
+import { AuthenticationStatus } from "../../store/models/authentication";
 
 export default {
   name: "AuthenticatedPage",
