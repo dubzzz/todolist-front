@@ -6,9 +6,11 @@
           <md-icon>menu</md-icon>
         </md-button>
         <h3 class="md-title" id="toolbar-label">Welcome {{username}}</h3>
-        <md-button class="md-icon-button">
-          <md-icon>shopping_cart</md-icon>
-        </md-button>
+        <md-badge v-bind:md-content="numTodos">
+          <md-button class="md-icon-button">
+            <md-icon>shopping_cart</md-icon>
+          </md-button>
+        </md-badge>
         <md-button class="md-icon-button" v-on:click="logout()">
           <md-icon>power_settings_new</md-icon>
         </md-button>
@@ -55,6 +57,9 @@ export default {
         this.$store.state.authentication.status ===
         AuthenticationStatus.Authenticated
       );
+    },
+    numTodos() {
+      return this.$store.state.todolist.todos.length;
     }
   },
   methods: {
