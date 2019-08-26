@@ -19,10 +19,18 @@ export default {
   computed: {
     canAddTodo() {
       return this.taskName.length > 0;
+    },
+    token() {
+      return this.$store.state.authentication.token;
     }
   },
   methods: {
-    addTodo() {}
+    addTodo() {
+      this.$store.dispatch("todolist/tryAddTodoAction", {
+        token: this.token,
+        task: this.taskName
+      });
+    }
   }
 };
 </script>
