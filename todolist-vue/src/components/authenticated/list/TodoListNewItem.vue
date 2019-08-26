@@ -28,6 +28,7 @@ export default {
         token,
         task: this.taskName
       });
+      this.taskName = "";
     }
   }
 };
