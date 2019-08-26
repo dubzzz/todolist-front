@@ -14,13 +14,10 @@ export default {
   components: { TodoListNewItem, TodoListList },
   computed: {
     ready() {
-      return false;
+      return this.$store.state.todolist.ready;
     },
     todos() {
-      return [
-        { data: { guid: "guid", task: "task", done: false }, state: "state" },
-        { data: { guid: "guid", task: "task", done: false }, state: "state" }
-      ];
+      return this.$store.state.todolist.todos;
     }
   }
 };
