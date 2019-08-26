@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0cedba"],{"60f0":function(e,n,t){"use strict";t.r(n);var a=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[e._v("TodoListPage")])},c=[],o={name:"TodoListPage"},s=o,i=t("2877"),u=Object(i["a"])(s,a,c,!1,null,"2c70493a",null);n["default"]=u.exports}}]);
-//# sourceMappingURL=chunk-2d0cedba.2873fc48.js.map
