@@ -83,14 +83,17 @@ const actions = {
       // ignore
     }
   },
-  async requestTodolistUpdates({ commit, state }, { token, requester }) {
+  async requestTodolistUpdates(
+    { commit, state, dispatch },
+    { token, requester }
+  ) {
     const handle =
       state.handle ||
       Api.addTodoListener(
         token,
         todos => commit("refreshTodosAction", { todos }),
         () => {
-          // commit("authentication/logout", null, { root: true });
+          dispatch("authentication/logout", null, { root: true });
         }
       );
     commit("addRequesterAction", { handle, requester });

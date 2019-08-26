@@ -33,11 +33,14 @@
 <script>
 export default {
   name: "LearnMorePage",
+  data: () => ({
+    nextToken: Math.random()
+      .toString(16)
+      .substr(2)
+  }),
   methods: {
     resetToken() {
-      window.validToken = Math.random()
-        .toString(16)
-        .substr(2);
+      window.validToken = this.nextToken;
     }
   }
 };
