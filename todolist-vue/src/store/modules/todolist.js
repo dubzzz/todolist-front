@@ -54,6 +54,34 @@ const actions = {
     } catch (err) {
       // ignore
     }
+  },
+  async tryRemoveTodoAction({ commit, state }, { token, guid }) {
+    const todos = state.todos;
+    const prevTodo = todos.find(
+      t => t.data.guid === guid && t.state === TodoState.Noop
+    );
+    if (!prevTodo) {
+      return;
+    }
+    commit("addOrEditTodoAction", {
+      todo: prevTodo.data,
+      todoState: TodoState.Remove
+    });
+
+    try {
+      const r = await Api.removeTodo(token, prevTodo.data);
+      if (!r) {
+        commit("addOrEditTodoAction", {
+          todo: prevTodo.data,
+          todoState: prevTodo.state
+        });
+      } else {
+        // We apply the modification
+        commit("removeTodoAction", { guid: prevTodo.data.guid });
+      }
+    } catch (err) {
+      // ignore
+    }
   }
 };
 

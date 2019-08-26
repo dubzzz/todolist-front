@@ -13,7 +13,7 @@
       <md-button v-if="syncState !== 'noop'">
         <md-icon>refresh</md-icon>
       </md-button>
-      <md-button>
+      <md-button v-on:click="removeTodo()">
         <md-icon>delete</md-icon>
       </md-button>
     </md-card-content>
@@ -28,6 +28,13 @@ export default {
     toggleTodo() {
       const token = this.$store.state.authentication.token;
       this.$store.dispatch("todolist/tryToggleTodoAction", {
+        token,
+        guid: this.content.guid
+      });
+    },
+    removeTodo() {
+      const token = this.$store.state.authentication.token;
+      this.$store.dispatch("todolist/tryRemoveTodoAction", {
         token,
         guid: this.content.guid
       });
