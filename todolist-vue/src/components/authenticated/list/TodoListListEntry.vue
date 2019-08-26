@@ -1,7 +1,11 @@
 <template>
   <md-card>
     <md-card-content class="todo-wrapper">
-      <md-checkbox v-bind:checked="content.done" v-bind:disabled="syncState !== 'noop'"></md-checkbox>
+      <md-checkbox
+        v-bind:value.sync="!content.done"
+        v-bind:disabled="syncState !== 'noop'"
+        v-on:change="toggleTodo()"
+      ></md-checkbox>
       <span
         class="todo-label"
         v-bind:class="{ remove: (syncState === 'remove'), noaction: (syncState !== 'noop') }"
@@ -19,7 +23,16 @@
 <script>
 export default {
   name: "TodoListListEntry",
-  props: { syncState: String, content: Object }
+  props: { syncState: String, content: Object },
+  methods: {
+    toggleTodo() {
+      const token = this.$store.state.authentication.token;
+      this.$store.dispatch("todolist/tryToggleTodoAction", {
+        token,
+        guid: this.content.guid
+      });
+    }
+  }
 };
 </script>
 
