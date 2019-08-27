@@ -2,12 +2,12 @@ language: node_js
 node_js: "10"
 
 script:
-  - cd todolist-react && yarn && yarn build && cd ..
-  - cd todolist-react-redux-saga && yarn && yarn build && cd ..
-  - cd todolist-react-redux-thunk && yarn && yarn build && cd ..
-  - cd todolist-angular && npm install && npm run build:prod && cd ..
-  - cd todolist-angular-ngxs && npm install && npm run build:prod && cd ..
-  - cd todolist-vue && yarn && yarn build && cd ..
+  - cd todolist-react && yarn && yarn build:report && cd ..
+  - cd todolist-react-redux-saga && yarn && yarn build:report && cd ..
+  - cd todolist-react-redux-thunk && yarn && yarn build:report && cd ..
+  - cd todolist-angular && npm install && npm run build:report && cd ..
+  - cd todolist-angular-ngxs && npm install && npm run build:report && cd ..
+  - cd todolist-vue && yarn && yarn build:report && cd ..
   - mkdir build
   - mv todolist-react/build build/todolist-react
   - mv todolist-react-redux-saga/build build/todolist-react-redux-saga
