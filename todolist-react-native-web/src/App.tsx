@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Text, View } from 'react-native';
+/*import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { withAuthenticated } from './hoc/Authenticated';
 import { AuthenticationProvider } from './context/AuthenticationContext';
@@ -7,14 +8,18 @@ import { NotificationProvider } from './context/NotificationContext';
 import LoginPage from './component/login/LoginPage';
 
 const loadAuthenticatedApp = () => import('./component/authenticated/AuthenticatedApp');
-const AuthenticatedApp = React.lazy(loadAuthenticatedApp);
+const AuthenticatedApp = React.lazy(loadAuthenticatedApp);*/
 
 const App: React.FC = () => {
-  useEffect(() => {
+  /*useEffect(() => {
     loadAuthenticatedApp();
-  }, []);
+  }, []);*/
   return (
-    <div className="App">
+    <View>
+      <Text>Welcome to App</Text>
+    </View>
+  );
+  /*<div className="App">
       <NotificationProvider maxNotifications={3}>
         <AuthenticationProvider>
           <Router>
@@ -25,8 +30,7 @@ const App: React.FC = () => {
           </Router>
         </AuthenticationProvider>
       </NotificationProvider>
-    </div>
-  );
+  </div>*/
 };
 
 export default App;

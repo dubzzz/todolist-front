@@ -1,4 +1,5 @@
 {
+  "name": "todolist-react-native-web",
   "expo": {
     "platforms": ["web"]
   }
