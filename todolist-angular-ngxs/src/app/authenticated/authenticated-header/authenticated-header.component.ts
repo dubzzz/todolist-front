@@ -12,6 +12,7 @@ import { AuthenticationState } from 'src/state/authentication/authentication.sta
 import { Select, Store } from '@ngxs/store';
 import { TryLogout } from 'src/state/authentication/authentication.actions';
 import { TodolistState } from 'src/state/todolist/todolist.state';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-authenticated-header',
@@ -27,11 +28,14 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
 
   @Select(TodolistState.numTodos)
   numTodos$: Observable<number>;
+  numTodosString$: Observable<string>;
 
   constructor(
     readonly store: Store,
     readonly todolistService: TodolistService
-  ) {}
+  ) {
+    this.numTodosString$ = this.numTodos$.pipe(map(n => String(n)));
+  }
 
   ngOnInit() {
     this.todolistService.addRequester(this);
