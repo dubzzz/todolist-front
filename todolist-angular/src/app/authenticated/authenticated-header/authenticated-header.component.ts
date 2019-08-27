@@ -21,7 +21,7 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
   @Output() toggleMenu = new EventEmitter<void>();
 
   username$: Observable<string>;
-  numTodos$: Observable<number>;
+  numTodos$: Observable<string>;
 
   constructor(
     readonly authService: AuthService,
@@ -30,7 +30,7 @@ export class AuthenticatedHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.username$ = this.authService.state$.pipe(map(s => s.username));
-    this.numTodos$ = this.todolistService.state$.pipe(map(s => s.todos.length));
+    this.numTodos$ = this.todolistService.state$.pipe(map(s => String(s.todos.length)));
     this.todolistService.addRequester(this);
   }
 
