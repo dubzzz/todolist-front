@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, TextInput, View, ActivityIndicator } from 'react-native';
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom';
 
 import { useAuthentication, AuthenticationState } from '../../context/AuthenticationContext';
@@ -20,57 +20,58 @@ function LoginPage(props: Props) {
     return <Redirect to={redirect} />;
   }
   return (
-    <View>
-      <Text>Welcome to Login</Text>
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Image
+          style={styles.header}
+          source={{
+            uri:
+              'https://upload.wikimedia.org/wikipedia/commons/f/f6/Eiffel_Tower_and_the_Trocadero%2C_Exposition_Universal%2C_1900%2C_Paris%2C_France.jpg'
+          }}
+        />
+        <Text>Welcome to TodoList React</Text>
+        <Text>Try with password: “password”</Text>
+        <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={u => setUsername(u)}
+          onKeyPress={ev => {
+            if (ev.nativeEvent.key === 'Enter') {
+              login(username, password);
+            }
+          }}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={p => setPassword(p)}
+          onKeyPress={ev => {
+            if (ev.nativeEvent.key === 'Enter') {
+              login(username, password);
+            }
+          }}
+          style={styles.input}
+        />
+        <Button disabled={!canLogin} onPress={() => login(username, password)} title="Login" />
+        {onGoingLogin ? <ActivityIndicator size={24} /> : <></>}
+      </View>
     </View>
   );
-  /*<div className={classes.cardContainer}>
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image="https://upload.wikimedia.org/wikipedia/commons/f/f6/Eiffel_Tower_and_the_Trocadero%2C_Exposition_Universal%2C_1900%2C_Paris%2C_France.jpg"
-          title="Eiffel Tower"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Welcome to TodoList React
-          </Typography>
-          <Typography className={classes.hint} color="textSecondary" gutterBottom>
-            Try with password: “password”
-          </Typography>
-          <TextField
-            label="Username"
-            value={username}
-            onChange={p => setUsername(p.currentTarget.value)}
-            onKeyPress={ev => {
-              if (ev.which === 13 && canLogin) {
-                login(username, password);
-                ev.preventDefault();
-              }
-            }}
-          />
-          <br />
-          <TextField
-            label="Password"
-            type="password"
-            value={password}
-            onChange={p => setPassword(p.currentTarget.value)}
-            onKeyPress={ev => {
-              if (ev.which === 13 && canLogin) {
-                login(username, password);
-                ev.preventDefault();
-              }
-            }}
-          />
-        </CardContent>
-        <CardActions>
-          <Button color="primary" disabled={!canLogin} onClick={() => login(username, password)}>
-            Login
-          </Button>
-          {onGoingLogin ? <CircularProgress size={24} /> : <></>}
-        </CardActions>
-      </Card>
-    </div>*/
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  card: {
+    width: 320,
+    paddingTop: 20
+  },
+  header: { width: '100%', height: 150, marginBottom: 10 },
+  input: { height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 5, marginBottom: 5 }
+});
 
 export default withRouter(LoginPage);
