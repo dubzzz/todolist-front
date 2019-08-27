@@ -4,9 +4,10 @@ import { TodoState } from "../models/todolist";
 const state = {
   ready: false,
   todos: [],
-  handle: null,
-  requesters: []
+  numRequesters: 0
 };
+
+let handle = null;
 
 const getters = {};
 
@@ -83,28 +84,26 @@ const actions = {
       // ignore
     }
   },
-  async requestTodolistUpdates(
-    { commit, state, dispatch },
-    { token, requester }
-  ) {
-    const handle =
-      state.handle ||
-      Api.addTodoListener(
+  async requestTodolistUpdates({ commit, dispatch }, { token }) {
+    if (!handle) {
+      handle = Api.addTodoListener(
         token,
         todos => commit("refreshTodosAction", { todos }),
         () => {
           dispatch("authentication/logout", null, { root: true });
         }
       );
-    commit("addRequesterAction", { handle, requester });
+    }
+    commit("addRequesterAction");
   },
-  async stopTodolistUpdates({ commit, state }, { requester }) {
-    const { handle, requesters } = state;
-    if (requesters.length === 1 && requesters[0] === requester) {
+  async stopTodolistUpdates({ commit, state }) {
+    const { numRequesters } = state;
+    if (numRequesters <= 1) {
       Api.removeTodoListener(handle);
-      commit("removeRequesterAction", { handle: null, requester });
+      handle = null;
+      commit("removeRequesterAction");
     } else {
-      commit("removeRequesterAction", { handle, requester });
+      commit("removeRequesterAction");
     }
   }
 };
@@ -144,16 +143,11 @@ const mutations = {
       })
       .concat(state.todos.filter(t => t.state === TodoState.Add)); // Add
   },
-  addRequesterAction(state, { handle, requester }) {
-    state.handle = handle;
-    if (state.requesters.includes(requester)) {
-      return;
-    }
-    state.requesters.push(requester);
+  addRequesterAction(state) {
+    state.numRequesters += 1;
   },
-  removeRequesterAction(state, { handle, requester }) {
-    state.handle = handle;
-    state.requesters = state.requesters.filter(r => r !== requester);
+  removeRequesterAction(state) {
+    state.numRequesters -= 1;
   }
 };
 

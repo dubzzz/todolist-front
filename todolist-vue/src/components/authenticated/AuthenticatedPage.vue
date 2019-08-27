@@ -85,13 +85,10 @@ export default {
   },
   mounted() {
     const token = this.$store.state.authentication.token;
-    this.$store.dispatch("todolist/requestTodolistUpdates", {
-      token,
-      requester: this
-    });
+    this.$store.dispatch("todolist/requestTodolistUpdates", { token });
   },
   destroyed() {
-    this.$store.dispatch("todolist/stopTodolistUpdates", { requester: this });
+    this.$store.dispatch("todolist/stopTodolistUpdates");
   }
 };
 </script>
