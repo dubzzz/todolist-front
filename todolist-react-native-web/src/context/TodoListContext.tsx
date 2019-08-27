@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Api from '../api';
-import { useNotification } from './NotificationContext';
 import { useAuthentication } from './AuthenticationContext';
 
 export enum TodoState {
@@ -25,7 +24,6 @@ const defaultTodoList = {} as TodoListContextType;
 const TodoListContext = createContext(defaultTodoList);
 
 export function TodoListProvider<TProps>(props: TProps) {
-  const { error } = useNotification();
   const { token, logout } = useAuthentication();
   const [ready, setReady] = useState(false);
   const [todos, setTodos] = useState([] as TodoType[]);
@@ -56,11 +54,10 @@ export function TodoListProvider<TProps>(props: TProps) {
       });
     };
     const handle = Api.addTodoListener(token, listener, () => {
-      error('Revoked token, connection lost');
-      logout(true);
+      logout();
     });
     return () => Api.removeTodoListener(handle);
-  }, [token, logout, error]);
+  }, [token, logout]);
 
   const addTodo = (task: string) => {
     const guid = Math.random()
@@ -71,7 +68,6 @@ export function TodoListProvider<TProps>(props: TProps) {
     setTodos(ts => [...ts, { state: TodoState.Add, data: todo }]);
     Api.addTodo(token, todo).then(r => {
       if (!r) {
-        error(`Failed to add todo: ${todo.task}`);
         setTodos(ts => ts.filter(t => t.data.guid !== guid));
       } else {
         // We apply the modification
@@ -83,7 +79,6 @@ export function TodoListProvider<TProps>(props: TProps) {
   const toggleTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) {
-      error(`No todo available for modification given guid ${guid}`);
       return;
     }
 
@@ -92,7 +87,6 @@ export function TodoListProvider<TProps>(props: TProps) {
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Edit, data: todo } : t)));
     Api.editTodo(token, todo).then(r => {
       if (!r) {
-        error(`Failed to edit todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification
@@ -104,14 +98,12 @@ export function TodoListProvider<TProps>(props: TProps) {
   const removeTodo = (guid: string) => {
     const prevTodo = todos.find(t => t.data.guid === guid && t.state === TodoState.Noop);
     if (!prevTodo) {
-      error(`No todo available for modification given guid ${guid}`);
       return;
     }
 
     setTodos(ts => ts.map(t => (t.data.guid === guid ? { state: TodoState.Remove, data: prevTodo.data } : t)));
     Api.removeTodo(token, prevTodo.data).then(r => {
       if (!r) {
-        error(`Failed to remove todo: ${prevTodo.data.task}`);
         setTodos(ts => ts.map(t => (t.data.guid === guid ? prevTodo : t)));
       } else {
         // We apply the modification

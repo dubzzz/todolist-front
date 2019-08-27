@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { useAuthentication, AuthenticationState } from '../context/AuthenticationContext';
 import { Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 type Props = { children: JSX.Element | JSX.Element[] } & RouteComponentProps;
 
@@ -19,7 +19,17 @@ function AuthenticationWrapper(props: Props) {
         />
       );
     case AuthenticationState.Authenticated:
-      return <Suspense fallback={<CircularProgress />}>{props.children}</Suspense>;
+      return (
+        <Suspense
+          fallback={
+            <View style={styles.container}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          }
+        >
+          {props.children}
+        </Suspense>
+      );
   }
 }
 
@@ -31,3 +41,10 @@ export function withAuthenticated<P>(WrappedComponent: React.ComponentType<P>): 
     </Wrapper>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});
