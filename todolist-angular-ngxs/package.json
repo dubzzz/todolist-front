@@ -9,8 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "analyze:es5": "cd dist/todolist-angular/ && webpack-bundle-analyzer stats-es5.json --mode static --no-open --report stats-es5.html",
-    "analyze:es2015": "cd dist/todolist-angular/ && webpack-bundle-analyzer stats-es2015.json --mode static --no-open --report stats-es2015.html"
+    "analyze:es5": "cd dist/todolist-angular-ngxs/ && webpack-bundle-analyzer stats-es5.json --mode static --no-open --report stats-es5.html",
+    "analyze:es2015": "cd dist/todolist-angular-ngxs/ && webpack-bundle-analyzer stats-es2015.json --mode static --no-open --report stats-es2015.html"
   },
   "private": true,
   "dependencies": {
