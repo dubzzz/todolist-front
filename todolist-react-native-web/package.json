@@ -1,0 +1,56 @@
+{
+  "name": "todolist-react-native-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.3.0",
+    "@material-ui/icons": "^4.2.1",
+    "@types/jest": "24.0.16",
+    "@types/node": "12.6.8",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.5",
+    "@types/react-router-dom": "^4.3.4",
+    "clsx": "^1.0.4",
+    "notistack": "^0.8.9",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-native": "^0.60.5",
+    "react-native-web": "^0.11.7",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "source-map-explorer": "^2.0.1",
+    "typescript": "3.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build:report": "yarn build && source-map-explorer 'build/static/js/*.js' --html build/report.html",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "format:check": "prettier --list-different \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "expo:start": "expo start --web --dev",
+    "expo:build": "expo start --web --no-dev"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.2.0",
+    "expo-cli": "^3.0.10",
+    "prettier": "1.18.2"
+  },
+  "homepage": "https://dubzzz.github.io/todolist-front/todolist-react-native-web/"
+}
