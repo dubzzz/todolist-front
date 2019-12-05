@@ -1,22 +1,24 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Injectable } from "@angular/core";
+import { State, Action, StateContext, Selector } from "@ngxs/store";
 import {
   AuthenticationStateModel,
   AuthenticationStatus
-} from './authentication.model';
-import * as Api from '../../api';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+} from "./authentication.model";
+import * as Api from "../../api";
+import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   TryLoginByCreds,
   TryLoginByToken,
   TryLogout
-} from './authentication.actions';
+} from "./authentication.actions";
 
+@Injectable()
 @State<AuthenticationStateModel>({
-  name: 'authenticationState',
+  name: "authenticationState",
   defaults: {
-    username: Api.readStorage('AuthenticationProvider', 'username'),
-    token: Api.readStorage('AuthenticationProvider', 'token'),
+    username: Api.readStorage("AuthenticationProvider", "username"),
+    token: Api.readStorage("AuthenticationProvider", "token"),
     status: AuthenticationStatus.NonAuthenticated
   }
 })
@@ -49,7 +51,7 @@ export class AuthenticationState {
     { username, password }: TryLoginByCreds
   ) {
     patchState({
-      token: '',
+      token: "",
       username,
       status: AuthenticationStatus.OnGoingAuthentication
     });
@@ -60,18 +62,18 @@ export class AuthenticationState {
         username: tokens.username,
         status: AuthenticationStatus.Authenticated
       });
-      Api.writeStorage('AuthenticationProvider', 'username', tokens.username);
-      Api.writeStorage('AuthenticationProvider', 'token', tokens.token);
-      this.snackBar.open('Login successful', '', {
+      Api.writeStorage("AuthenticationProvider", "username", tokens.username);
+      Api.writeStorage("AuthenticationProvider", "token", tokens.token);
+      this.snackBar.open("Login successful", "", {
         duration: 1000
       });
     } catch (err) {
       patchState({
-        token: '',
+        token: "",
         username,
         status: AuthenticationStatus.NonAuthenticated
       });
-      this.snackBar.open('Login failure', '', {
+      this.snackBar.open("Login failure", "", {
         duration: 1000
       });
     }
@@ -80,10 +82,10 @@ export class AuthenticationState {
   @Action(TryLoginByToken)
   async tryLoginByToken(
     { getState, patchState }: StateContext<AuthenticationStateModel>,
-    {  }: TryLoginByToken
+    {}: TryLoginByToken
   ) {
     const { token, username } = getState();
-    if (token === '') {
+    if (token === "") {
       return;
     }
 
@@ -100,7 +102,7 @@ export class AuthenticationState {
           username,
           status: AuthenticationStatus.Authenticated
         });
-        this.snackBar.open('Login successful', '', {
+        this.snackBar.open("Login successful", "", {
           duration: 1000
         });
         return;
@@ -119,18 +121,18 @@ export class AuthenticationState {
     { silent }: TryLogout
   ) {
     patchState({
-      token: '',
-      username: '',
+      token: "",
+      username: "",
       status: AuthenticationStatus.NonAuthenticated
     });
-    Api.clearStorage('AuthenticationProvider', 'username');
-    Api.clearStorage('AuthenticationProvider', 'token');
+    Api.clearStorage("AuthenticationProvider", "username");
+    Api.clearStorage("AuthenticationProvider", "token");
     if (!silent) {
-      this.snackBar.open('Logout successful', '', {
+      this.snackBar.open("Logout successful", "", {
         duration: 1000
       });
     }
-    this.router.navigate(['/login'], {
+    this.router.navigate(["/login"], {
       queryParams: {
         redirect: this.router.routerState.snapshot.url
       }

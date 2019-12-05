@@ -1,17 +1,19 @@
-import { TodolistStateModel, TodoSyncState } from './todolist.model';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Injectable } from "@angular/core";
+import { TodolistStateModel, TodoSyncState } from "./todolist.model";
+import { State, Action, StateContext, Selector } from "@ngxs/store";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   RefreshTodos,
   TryAddTodo,
   TryToggleTodo,
   TryRemoveTodo,
   UpdateRefreshStatus
-} from './todolist.actions';
-import * as Api from '../../api';
+} from "./todolist.actions";
+import * as Api from "../../api";
 
+@Injectable()
 @State<TodolistStateModel>({
-  name: 'todolistState',
+  name: "todolistState",
   defaults: { ready: false, todos: [] }
 })
 export class TodolistState {
@@ -103,7 +105,7 @@ export class TodolistState {
       patchState({
         todos: getState().todos.filter(t => t.data.guid !== todo.guid)
       });
-      this.snackBar.open(`Failed to add todo: ${todo.task}`, '', {
+      this.snackBar.open(`Failed to add todo: ${todo.task}`, "", {
         duration: 1000
       });
     }
@@ -120,7 +122,7 @@ export class TodolistState {
     if (!todo) {
       this.snackBar.open(
         `No todo available for modification given guid ${guid}`,
-        '',
+        "",
         {
           duration: 1000
         }
@@ -161,7 +163,7 @@ export class TodolistState {
             : t
         )
       });
-      this.snackBar.open(`Failed to edit todo: ${todo.data.task}`, '', {
+      this.snackBar.open(`Failed to edit todo: ${todo.data.task}`, "", {
         duration: 1000
       });
     }
@@ -178,7 +180,7 @@ export class TodolistState {
     if (!todo) {
       this.snackBar.open(
         `No todo available for modification given guid ${guid}`,
-        '',
+        "",
         {
           duration: 1000
         }
@@ -208,7 +210,7 @@ export class TodolistState {
             : t
         )
       });
-      this.snackBar.open(`Failed to remove todo: ${todo.data.task}`, '', {
+      this.snackBar.open(`Failed to remove todo: ${todo.data.task}`, "", {
         duration: 1000
       });
     }
