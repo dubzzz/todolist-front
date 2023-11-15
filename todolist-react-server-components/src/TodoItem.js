@@ -2,19 +2,13 @@
 'use client';
 
 import React from 'react';
-import { useMutation, useRouter } from './framework/router';
+import { useMutation } from './framework/router';
 
 export default function TodoItem({ todo }) {
-  const { refresh } = useRouter();
   const [isSaving, toggleTodo] = useMutation({ endpoint: '/todos/toggle', method: 'POST' });
 
   return (
-    <span
-      onClick={async () => {
-        await toggleTodo({ id: todo.id }, {});
-        refresh();
-      }}
-    >
+    <span onClick={() => toggleTodo({ id: todo.id }, {})}>
       [{isSaving ? '?' : todo.done ? 'X' : '\xA0'}] {todo.task}
     </span>
   );
