@@ -2,10 +2,11 @@
 import AddTodo from './AddTodo';
 import React from 'react';
 import TodoItem from './TodoItem';
-import { readTodos } from '../server/Db';
+import { readRichTodos } from '../server/Db';
+import TodoListener from './TodoListener';
 
 export default async function Todolist() {
-  const todos = await readTodos();
+  const { todos, checksum } = await readRichTodos();
 
   return (
     <div>
@@ -20,6 +21,7 @@ export default async function Todolist() {
           </li>
         ))}
       </ul>
+      <TodoListener checksum={checksum} />
     </div>
   );
 }

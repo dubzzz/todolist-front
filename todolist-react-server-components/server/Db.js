@@ -1,4 +1,5 @@
 // @ts-check
+const crypto = require('crypto');
 const path = require('path');
 const { existsSync, writeFileSync } = require('fs');
 const { readFile, writeFile } = require('fs').promises;
@@ -38,6 +39,18 @@ async function readTodos() {
   return JSON.parse(todosResponse.toString());
 }
 module.exports.readTodos = readTodos;
+
+/**
+ * Get back the Todos and the associated checksum
+ * @returns {Promise<{todos:TodoElement[],checksum:string}>}
+ */
+async function readRichTodos() {
+  const todos = await readTodos();
+  const shasum = crypto.createHash('sha1');
+  shasum.update(JSON.stringify(todos));
+  return { todos, checksum: shasum.digest('hex') };
+}
+module.exports.readRichTodos = readRichTodos;
 
 /**
  * Add a new Todo in the set of existing Todos.

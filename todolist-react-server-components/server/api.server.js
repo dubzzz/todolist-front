@@ -18,7 +18,7 @@ const { renderToPipeableStream } = require('react-server-dom-webpack/server');
 const path = require('path');
 const React = require('react');
 const ReactApp = require('../src/App').default;
-const { addTodo, toggleTodo } = require('./Db');
+const { addTodo, toggleTodo, readRichTodos } = require('./Db');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -72,6 +72,14 @@ app.get('/react', function(req, res) {
 });
 
 // Handling API calls
+
+app.post(
+  '/todos/checksum',
+  handleErrors(async (req, res) => {
+    const richTodos = await readRichTodos();
+    res.send(richTodos.checksum);
+  })
+);
 
 app.post(
   '/todos/new',
