@@ -50,15 +50,8 @@ app
     }
   });
 
-function handleErrors(fn) {
-  return async function(req, res, next) {
-    try {
-      return await fn(req, res);
-    } catch (x) {
-      next(x);
-    }
-  };
-}
+// Handling React bootstrap of the Client
+// (returns the index.html)
 
 app.get(
   '/',
@@ -72,24 +65,13 @@ app.get(
   })
 );
 
-async function renderReactTree(res, props) {
-  await waitForWebpack();
-  const manifest = readFileSync(path.resolve(__dirname, '../build/react-client-manifest.json'), 'utf8');
-  const moduleMap = JSON.parse(manifest);
-  const { pipe } = renderToPipeableStream(React.createElement(ReactApp, props), moduleMap);
-  pipe(res);
-}
-
-function sendResponse(req, res, locationOverrides) {
-  const location = JSON.parse(req.query.location);
-  const newLocation = { ...location, ...locationOverrides };
-  res.set('X-Location', JSON.stringify(newLocation));
-  renderReactTree(res, newLocation);
-}
+// Handling initial state or reloads
 
 app.get('/react', function(req, res) {
   sendResponse(req, res, {});
 });
+
+// Handling API calls
 
 app.post(
   '/todos/new',
@@ -107,8 +89,37 @@ app.post(
   })
 );
 
+// Handling static assets
+
 app.use(express.static('build'));
 app.use(express.static('public'));
+
+// Various helpers
+
+function handleErrors(fn) {
+  return async function(req, res, next) {
+    try {
+      return await fn(req, res);
+    } catch (x) {
+      next(x);
+    }
+  };
+}
+
+async function renderReactTree(res, props) {
+  await waitForWebpack();
+  const manifest = readFileSync(path.resolve(__dirname, '../build/react-client-manifest.json'), 'utf8');
+  const moduleMap = JSON.parse(manifest);
+  const { pipe } = renderToPipeableStream(React.createElement(ReactApp, props), moduleMap);
+  pipe(res);
+}
+
+function sendResponse(req, res, locationOverrides) {
+  const location = JSON.parse(req.query.location);
+  const newLocation = { ...location, ...locationOverrides };
+  res.set('X-Location', JSON.stringify(newLocation));
+  renderReactTree(res, newLocation);
+}
 
 async function waitForWebpack() {
   while (true) {
