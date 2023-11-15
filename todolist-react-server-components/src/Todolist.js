@@ -1,15 +1,11 @@
 // @ts-check
-import path from 'path';
-import { readFile, writeFile } from 'fs/promises';
 import AddTodo from './AddTodo';
 import React from 'react';
 import TodoItem from './TodoItem';
-
-const dbPath = path.join(__dirname, '..', 'db', 'todos.json');
+import { readTodos } from '../server/Db';
 
 export default async function Todolist() {
-  const todosResponse = await readFile(dbPath);
-  const todos = JSON.parse(todosResponse.toString());
+  const todos = await readTodos();
 
   return (
     <div>

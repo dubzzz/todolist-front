@@ -13,12 +13,12 @@ babelRegister({
 
 const express = require('express');
 const compress = require('compression');
-const { existsSync, readFileSync, writeFileSync } = require('fs');
-const { readFile, writeFile } = require('fs').promises;
+const { readFileSync } = require('fs');
 const { renderToPipeableStream } = require('react-server-dom-webpack/server');
 const path = require('path');
 const React = require('react');
 const ReactApp = require('../src/App').default;
+const { addTodo, toggleTodo } = require('./Db');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -80,63 +80,30 @@ async function renderReactTree(res, props) {
   pipe(res);
 }
 
-function sendResponse(req, res, redirectToId) {
+function sendResponse(req, res, locationOverrides) {
   const location = JSON.parse(req.query.location);
-  if (redirectToId) {
-    location.selectedId = redirectToId;
-  }
-  res.set('X-Location', JSON.stringify(location));
-  renderReactTree(res, {
-    selectedId: location.selectedId,
-    isEditing: location.isEditing,
-    searchText: location.searchText
-  });
+  const newLocation = { ...location, ...locationOverrides };
+  res.set('X-Location', JSON.stringify(newLocation));
+  renderReactTree(res, newLocation);
 }
 
 app.get('/react', function(req, res) {
-  sendResponse(req, res, null);
-});
-
-const dbPath = path.join(__dirname, '..', 'db', 'todos.json');
-
-if (!existsSync(dbPath)) {
-  writeFileSync(dbPath, '[]');
-}
-
-app.get('/todos', async (req, res) => {
-  const todosResponse = await readFile(dbPath);
-  res.send(todosResponse.toString());
+  sendResponse(req, res, {});
 });
 
 app.post(
   '/todos/new',
   handleErrors(async (req, res) => {
-    // Not race-condition free, just experiementing React Server Components
-    // not aiming production-grade application
-    const todosResponse = await readFile(dbPath);
-    const todos = JSON.parse(todosResponse.toString());
-    todos.push({
-      id: Math.random()
-        .toString(16)
-        .substring(2),
-      done: false,
-      task: req.body.value
-    });
-    await writeFile(dbPath, JSON.stringify(todos));
-    renderReactTree(res, {});
+    await addTodo(req.body.value);
+    sendResponse(req, res, {});
   })
 );
 
 app.post(
   '/todos/toggle',
   handleErrors(async (req, res) => {
-    // Not race-condition free, just experiementing React Server Components
-    // not aiming production-grade application
-    const todosResponse = await readFile(dbPath);
-    const todos = JSON.parse(todosResponse.toString());
-    todos.map(todo => (todo.id === req.body.id ? { ...todo, done: !todo.done } : todo));
-    await writeFile(dbPath, JSON.stringify(todos));
-    renderReactTree(res, {});
+    await toggleTodo(req.body.id);
+    sendResponse(req, res, {});
   })
 );
 
